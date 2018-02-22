@@ -1,0 +1,14 @@
+animation0:
+    pos: [0, 0]
+    duration: 1.0
+    transition: 'linear'
+
+animation1:
+    pos: [100, 300]
+    duration: 1.0
+    transition: 'linear'
+
+animation2:
+    pos: [100, 0]
+    duration: 1.0
+    transition: 'linear'
