@@ -2,7 +2,3 @@ __pycache__/
 bin/
 *.pyc
 *.pyo
-*.sublime-workspace
-buildozer.spec
-
-/.buildozer/
