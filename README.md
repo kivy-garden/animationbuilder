@@ -6,6 +6,8 @@ A module for creating Kivy Animation easily.
 Kv言語に似た文法でAnimationを記述できます。詳しくはtest.pyを見てください。  
 You can write animation code with KvLanguage-like syntax. Take a look test.py.  
 
+[Youtube](https://youtu.be/2H9lUvtcATU)  
+
 # 開発環境
 
 Python 3．5．0  
