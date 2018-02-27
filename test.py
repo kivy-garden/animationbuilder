@@ -7,35 +7,27 @@ from animationbuilder import AnimationBuilder
 
 
 ANIMATION_DATA = r'''
-move_right:
-    x: 700
-    d: 1.0
-move_left:
-    x: 0
-    d: 1.0
-move_up:
-    y: 500
-    d: 1.0
-move_down:
-    y: 0
-    d: 1.0
+move_to_center:
+    center: [400, 300, ]
 
 keep_moving:
-    compound: "move_right + move_up + move_left + move_down + sleep(1)"
+    compound:
+        - right: 800
+        - top: 600
+        - x: 0
+        - y: 0
+        - move_to_center
+        - d: 1
     repeat: True
 
-opacity1:
-    opacity: 0
-    d: .3
-    t: 'in_out_cubic'
-
-opacity2:
-    opacity: 1
-    d: .3
-    t: 'in_out_cubic'
-
 blinking:
-    compound: "opacity1 + opacity2"
+    compound:
+        - opacity: 0
+          t: 'in_out_quad'
+          d: 0.3
+        - opacity: 1
+          t: 'in_out_quad'
+          d: 0.3
     repeat: True
 
 all_in:
@@ -54,8 +46,9 @@ FloatLayout:
         text: 'Start'
 ''')
 button = root.ids.button
-# button.bind(on_press=lambda button: animations['move_right'].start(button))
+# button.bind(on_press=lambda button: animations['move_to_center'].start(button))
 # button.bind(on_press=lambda button: animations['keep_moving'].start(button))
+# button.bind(on_press=lambda button: animations['blinking'].start(button))
 button.bind(on_press=lambda button: animations['all_in'].start(button))
 
 runTouchApp(root)

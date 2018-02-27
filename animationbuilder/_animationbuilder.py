@@ -8,16 +8,17 @@ import collections.abc
 
 import yaml
 
-from ._compiler import compile, prepare_for_compile
+from ._compiler import Compiler
 
 
 class AnimationData(collections.abc.Mapping):
 
     def __init__(self, database):
         self.database = database
+        self.compile = Compiler(database).compile
 
     def __getitem__(self, key):
-        return compile(key, self.database)
+        return self.compile(key)
 
     def __iter__(self):
         return iter(self.database)
@@ -39,6 +40,4 @@ class AnimationBuilder:
 
     @staticmethod
     def load_stream(stream):
-        database = yaml.load(stream)
-        prepare_for_compile(database)
-        return AnimationData(database)
+        return AnimationData(yaml.load(stream))

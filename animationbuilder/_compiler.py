@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-__all__ = ('prepare_for_compile', 'compile', )
+__all__ = ('Compiler', )
 
 
 import ast
@@ -13,7 +13,13 @@ from ._exception import AnimationBuilderException
 class Compiler:
 
     def __init__(self, database):
-        self.database = database
+        self.database = {
+            key: self.prepare_dictionary(data)
+            for key, data in database.items()
+        }
+
+    def compile(self, key):
+        return self.compile_identifier(key)
 
     def BinOp(self, node):
         operator = node.op.__class__.__name__
@@ -34,15 +40,7 @@ class Compiler:
         return self.compile_node(node.value)
 
     def Name(self, node):
-        data = self.database.get(node.id)
-        if data is None:
-            raise AnimationBuilderException(
-                "Unknown identifier '{}'".format(node.id))
-        return self.compile_data(data)
-        if 'compound' in data:
-            return self.compile(data['compound'])
-        else:
-            return Animation(**data)
+        return self.compile_identifier(node.id)
 
     def Call(self, node):
         func_name = node.func.id
@@ -64,24 +62,59 @@ class Compiler:
         else:
             return handler(node)
 
-    def compile_data(self, data):
-        node = data.get('compound')
-        if node is None:
-            return Animation(**data)
+    def compile_identifier(self, identifier):
+        value = self.database.get(identifier)
+        if value is None:
+            raise AnimationBuilderException(
+                "Unknown identifier '{}'".format(identifier))
+        data, handler = value
+        # print(data, handler)
+        return handler(data)
+
+    def compile_simple_dictionary(self, dictionary):
+        return Animation(**dictionary)
+
+    def compile_ast_dictionary(self, dictionary):
+        node = dictionary['builder_internal_ast']
         anim = self.compile_node(node)
-        kwargs = data.copy()
-        del kwargs['compound']
+        kwargs = dictionary.copy()
+        del kwargs['builder_internal_ast']
         for key, value in kwargs.items():
             setattr(anim, key, value)
         return anim
 
+    def compile_list_dictionary(self, dictionary):
+        listobj = dictionary['builder_internal_list']
 
-def prepare_for_compile(database):
-    for data in database.values():
-        s = data.get('compound')
-        if s is not None:
-            data['compound'] = ast.parse(s).body[0]
+        data, handler = listobj[0]
+        anim = handler(data)
+        for data, handler in listobj[1:]:
+            anim += handler(data)
 
+        kwargs = dictionary.copy()
+        del kwargs['builder_internal_list']
+        for key, value in kwargs.items():
+            setattr(anim, key, value)
+        return anim
 
-def compile(key, database):
-    return Compiler(database).compile_data(database[key])
+    def prepare_dictionary(self, dictionary):
+        compound = dictionary.pop('compound', None)
+        if compound is None:
+            return (dictionary, self.compile_simple_dictionary, )
+        elif isinstance(compound, str):
+            dictionary['builder_internal_ast'] = ast.parse(compound).body[0]
+            return (dictionary, self.compile_ast_dictionary, )
+        elif isinstance(compound, (list, tuple, )):
+            dictionary['builder_internal_list'] = self.prepare_list(compound)
+            return (dictionary, self.compile_list_dictionary, )
+        else:
+            raise AnimationBuilderException("'compound' must be string or list.")
+
+    def prepare_list(self, listobj):
+        return [
+            (item, self.compile_identifier, ) if isinstance(item, str)
+            else self.prepare_dictionary(item) if isinstance(item, dict)
+            else (item, self.compile_unsupported, )
+            for item in listobj
+        ]
+
