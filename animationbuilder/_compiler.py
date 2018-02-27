@@ -16,7 +16,13 @@ class Compiler:
         self.database = database
 
     def BinOp(self, node):
-        return getattr(self, node.op.__class__.__name__)(node.left, node.right)
+        operator = node.op.__class__.__name__
+        handler = getattr(self, operator, None)
+        if handler is None:
+            raise AnimationBuilderException(
+                "Unknown operator '{}'".format(operator))
+        else:
+            return handler(node.left, node.right)
 
     def Add(self, left_node, right_node):
         return self.compile_node(left_node) + self.compile_node(right_node)
