@@ -56,7 +56,13 @@ class Compiler:
         return Animation(duration=node.args[0].n)
 
     def compile_node(self, node):
-        return getattr(self, node.__class__.__name__)(node)
+        node_name = node.__class__.__name__
+        handler = getattr(self, node_name, None)
+        if handler is None:
+            raise AnimationBuilderException(
+                "Unknown node '{}'".format(node_name))
+        else:
+            return handler(node)
 
     def compile_data(self, data):
         node = data.get('compound')
