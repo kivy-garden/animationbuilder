@@ -1,3 +1,5 @@
+(I'm not fluent in English. If someone correct my English I'd appreciate.)  
+
 # AnimationBuilder: Easy way of writing Kivy Animations
 
 Using kivy.animation.Animation directly is a pain. AnimationBuilder provides you with easy way.
@@ -32,7 +34,7 @@ Animation(right=800, d=2).start(some_widget1)
 Animation(top=600, t='in_out_cubic').start(some_widget2)
 ```
 
-The former Looks even worse than the latter. But when you write more complex animations, the latter code becomes unreadable.  
+The former looks even worse than the latter. But when you write more complex animations, the latter becomes unreadable.  
 
 ### Sequential Animation
 
@@ -153,7 +155,7 @@ You can write Python expression with limited operators('+', '&', '()').
 
 #### sleep()
 
-In the freestyle expression, you can use sleep() function  
+In a freestyle expression, you can use sleep() function  
 
 ```yaml
 test:
@@ -184,7 +186,7 @@ move_to_top:
 
 ## Live Preview
 
-Just like [kviewer](https://github.com/kivy/kivy/blob/master/kivy/tools/kviewer.py), you can preview your animation in realtime.
+Just like [kviewer](https://github.com/kivy/kivy/blob/master/kivy/tools/kviewer.py), livepreview.py allowing you to dynamically display the animation.
 
 ```text
 python3 ./livepreview.py filename.yaml
@@ -196,13 +198,34 @@ python3 ./livepreview.py filename.yaml
 ## Requirements
 
 - pyyaml
-- watchdog
+- watchdog (optional, only needed if you wanna use livepreview.py)
+
+## Notes
+
+### AnimationBuilder can not change the Animation parameters dynamically
+
+So if you wanna do that, you need to do something like this:  
+
+```
+AnimationBuilder.load_string(''.format())
+```
+
+which is a huge disadvantage IMO.  
+
+### Every time you call __getitem__(), it create a new instance of Animation
+
+which means  
+
+```python
+anims['key'] is anims['key']
+```
+
+is always False.  
 
 ## Others
 
 [Youtube](https://www.youtube.com/playlist?list=PLNdhqAjzeEGiF1oLISnCCPoPj1FhZbOAP)  
 
-#### Tested Exvironment
-
+**Tested Environment**  
 Python 3.5.0  
 Kivy 1.10.0  
