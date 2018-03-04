@@ -97,6 +97,10 @@ class Compiler:
             setattr(anim, key, value)
         return anim
 
+    def compile_unsupported(self, data):
+        raise AnimationBuilderException(
+            "Unsupported data type: " + str(type(data)))
+
     def prepare_dictionary(self, dictionary):
         # sequential
         sequential = dictionary.get('sequential', None)
