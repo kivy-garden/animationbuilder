@@ -71,20 +71,20 @@ class Compiler:
         # print(data, handler)
         return handler(data)
 
-    def compile_simple_dictionary(self, dictionary):
+    def compile_simple(self, dictionary):
         return Animation(**dictionary)
 
-    def compile_ast_dictionary(self, dictionary):
-        node = dictionary['builder_internal_ast']
+    def compile_freestyle(self, dictionary):
+        node = dictionary['freestyle']
         anim = self.compile_node(node)
         kwargs = dictionary.copy()
-        del kwargs['builder_internal_ast']
+        del kwargs['freestyle']
         for key, value in kwargs.items():
             setattr(anim, key, value)
         return anim
 
-    def compile_list_dictionary(self, dictionary):
-        listobj = dictionary['builder_internal_list']
+    def compile_sequential(self, dictionary):
+        listobj = dictionary['sequential']
 
         data, handler = listobj[0]
         anim = handler(data)
@@ -92,23 +92,24 @@ class Compiler:
             anim += handler(data)
 
         kwargs = dictionary.copy()
-        del kwargs['builder_internal_list']
+        del kwargs['sequential']
         for key, value in kwargs.items():
             setattr(anim, key, value)
         return anim
 
     def prepare_dictionary(self, dictionary):
-        compound = dictionary.pop('compound', None)
-        if compound is None:
-            return (dictionary, self.compile_simple_dictionary, )
-        elif isinstance(compound, str):
-            dictionary['builder_internal_ast'] = ast.parse(compound).body[0]
-            return (dictionary, self.compile_ast_dictionary, )
-        elif isinstance(compound, (list, tuple, )):
-            dictionary['builder_internal_list'] = self.prepare_list(compound)
-            return (dictionary, self.compile_list_dictionary, )
-        else:
-            raise AnimationBuilderException("'compound' must be string or list.")
+        # sequential
+        sequential = dictionary.get('sequential', None)
+        if sequential is not None:
+            dictionary['sequential'] = self.prepare_list(sequential)
+            return (dictionary, self.compile_sequential, )
+        # freestyle
+        freestyle = dictionary.get('freestyle', None)
+        if freestyle is not None:
+            dictionary['freestyle'] = ast.parse(freestyle).body[0]
+            return (dictionary, self.compile_freestyle, )
+        # simple
+        return (dictionary, self.compile_simple)
 
     def prepare_list(self, listobj):
         return [
@@ -117,4 +118,3 @@ class Compiler:
             else (item, self.compile_unsupported, )
             for item in listobj
         ]
-

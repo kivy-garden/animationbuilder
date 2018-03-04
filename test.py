@@ -11,7 +11,7 @@ move_to_center:
     center: [400, 300, ]
 
 keep_moving:
-    compound:
+    sequential:
         - right: 800
         - top: 600
         - x: 0
@@ -21,7 +21,7 @@ keep_moving:
     repeat: True
 
 blinking:
-    compound:
+    sequential:
         - opacity: 0
           t: 'in_out_quad'
           d: 0.3
@@ -31,7 +31,10 @@ blinking:
     repeat: True
 
 all_in:
-    compound: "keep_moving & blinking"
+    freestyle: "keep_moving & blinking"
+
+sleep_test:
+    freestyle: "sleep(1) + move_to_center"
 '''
 
 
@@ -49,6 +52,7 @@ button = root.ids.button
 # button.bind(on_press=lambda button: animations['move_to_center'].start(button))
 # button.bind(on_press=lambda button: animations['keep_moving'].start(button))
 # button.bind(on_press=lambda button: animations['blinking'].start(button))
+# button.bind(on_press=lambda button: animations['sleep_test'].start(button))
 button.bind(on_press=lambda button: animations['all_in'].start(button))
 
 runTouchApp(root)
