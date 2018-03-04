@@ -7,7 +7,7 @@ Using kivy.animation.Animation directly is a pain. AnimationBuilder provides you
 ### Basic
 
 ```python
-from animationbuilder import AnimationBuilder
+from kivy.garden.animationbuilder import AnimationBuilder
 
 
 anims = AnimationBuilder.load_string(r'''
