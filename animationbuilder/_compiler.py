@@ -97,6 +97,20 @@ class Compiler:
             setattr(anim, key, value)
         return anim
 
+    def compile_parallel(self, dictionary):
+        listobj = dictionary['parallel']
+
+        data, handler = listobj[0]
+        anim = handler(data)
+        for data, handler in listobj[1:]:
+            anim &= handler(data)
+
+        kwargs = dictionary.copy()
+        del kwargs['parallel']
+        for key, value in kwargs.items():
+            setattr(anim, key, value)
+        return anim
+
     def compile_unsupported(self, data):
         raise AnimationBuilderException(
             "Unsupported data type: " + str(type(data)))
@@ -107,6 +121,11 @@ class Compiler:
         if sequential is not None:
             dictionary['sequential'] = self.prepare_list(sequential)
             return (dictionary, self.compile_sequential, )
+        # parallel
+        parallel = dictionary.get('parallel', None)
+        if parallel is not None:
+            dictionary['parallel'] = self.prepare_list(parallel)
+            return (dictionary, self.compile_parallel, )
         # freestyle
         freestyle = dictionary.get('freestyle', None)
         if freestyle is not None:

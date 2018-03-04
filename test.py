@@ -35,6 +35,12 @@ all_in:
 
 sleep_test:
     freestyle: "sleep(1) + move_to_center"
+
+parallel_test:
+    parallel:
+        - right: 800
+          d: 1.5
+        - top: 600
 '''
 
 
@@ -53,6 +59,7 @@ button = root.ids.button
 # button.bind(on_press=lambda button: animations['keep_moving'].start(button))
 # button.bind(on_press=lambda button: animations['blinking'].start(button))
 # button.bind(on_press=lambda button: animations['sleep_test'].start(button))
-button.bind(on_press=lambda button: animations['all_in'].start(button))
+button.bind(on_press=lambda button: animations['parallel_test'].start(button))
+# button.bind(on_press=lambda button: animations['all_in'].start(button))
 
 runTouchApp(root)
