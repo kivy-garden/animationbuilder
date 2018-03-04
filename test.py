@@ -38,9 +38,11 @@ sleep_test:
 
 parallel_test:
     parallel:
+        - top: 600
         - right: 800
           d: 1.5
-        - top: 600
+        - opacity: 0
+          d: 2
 '''
 
 

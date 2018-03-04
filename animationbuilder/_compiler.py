@@ -84,32 +84,24 @@ class Compiler:
         return anim
 
     def compile_sequential(self, dictionary):
-        listobj = dictionary['sequential']
+        anims = [handler(data) for (data, handler, ) in dictionary['sequential']]
+        anim = sum(anims[1:], anims[0])
 
-        data, handler = listobj[0]
-        anim = handler(data)
-        for data, handler in listobj[1:]:
-            anim += handler(data)
-
-        kwargs = dictionary.copy()
-        del kwargs['sequential']
-        for key, value in kwargs.items():
-            setattr(anim, key, value)
+        for key, value in dictionary.items():
+            if key != 'sequential':
+                setattr(anim, key, value)
         return anim
 
     def compile_parallel(self, dictionary):
-        listobj = dictionary['parallel']
+        anims = [handler(data) for (data, handler, ) in dictionary['parallel']]
+        r = anims[0]
+        for anim in anims[1:]:
+            r &= anim
 
-        data, handler = listobj[0]
-        anim = handler(data)
-        for data, handler in listobj[1:]:
-            anim &= handler(data)
-
-        kwargs = dictionary.copy()
-        del kwargs['parallel']
-        for key, value in kwargs.items():
-            setattr(anim, key, value)
-        return anim
+        for key, value in dictionary.items():
+            if key != 'parallel':
+                setattr(r, key, value)
+        return r
 
     def compile_unsupported(self, data):
         raise AnimationBuilderException(
