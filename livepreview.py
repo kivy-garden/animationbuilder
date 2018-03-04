@@ -1,16 +1,17 @@
 '''
+(This file is based on kivy/tools/kviewer.py)
+
 livepreview
 =======
 
 livepreview is a simple tool allowing you to dynamically display
 a anim file, taking its changes into account (thanks to watchdog).
-(This file is based on kivy/tools/kviewer.py)
 
 You can use the script as follows::
 
     python livepreview.py ./test.yaml
 
-This will display the test.kv and automatically update the display when the
+This will display the test.yaml and automatically update the display when the
 file changes.
 
 .. note: This scripts uses watchdog to listen for fiel changes. To install
