@@ -3,7 +3,7 @@
 KivyのAnimationを簡單に書く為のModuleです。  
 A module for writing Kivy Animation easily.  
 
-[demo(Youtube)](https://youtu.be/p6xst-dXMVI)  
+[Youtube](https://www.youtube.com/playlist?list=PLNdhqAjzeEGiF1oLISnCCPoPj1FhZbOAP)  
 
 # 開發環境
 
