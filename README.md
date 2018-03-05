@@ -2,7 +2,9 @@
 
 # AnimationBuilder: Easy way of writing Kivy Animations
 
-Using kivy.animation.Animation directly is a pain. AnimationBuilder provides you with easy way.
+Using kivy.animation.Animation directly is a pain. AnimationBuilder provides you with easy way.  
+
+![screenshot](screenshot.png)
 
 ## Usage
 
@@ -192,7 +194,7 @@ Just like [kviewer](https://github.com/kivy/kivy/blob/master/kivy/tools/kviewer.
 python3 ./livepreview.py filename.yaml
 ```
 
-![screenshot](screenshot/livepreview.png)  
+![screenshot](screenshot_livepreview.png)  
 
 
 ## Requirements
@@ -201,6 +203,11 @@ python3 ./livepreview.py filename.yaml
 - watchdog (optional, only needed by livepreview.py)
 
 ## Notes
+
+### short forms
+
+You can type 'S' instead of 'sequential'.  
+Same as 'parallel' -> 'P', 'freestyle' -> 'F'  
 
 ### AnimationBuilder can not change the Animation parameters dynamically
 
@@ -212,7 +219,7 @@ AnimationBuilder.load_string(''.format())
 
 which is a huge disadvantage IMO.  
 
-### Every time you call __getitem__(), it create a new instance of Animation
+### Everytime you call \_\_getitem\_\_(), it returns a new instance of Animation
 
 which means  
 
