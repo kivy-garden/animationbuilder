@@ -209,25 +209,19 @@ python3 ./livepreview.py filename.yaml
 You can type 'S' instead of 'sequential'.  
 Same as 'parallel' -> 'P', 'freestyle' -> 'F'  
 
-### AnimationBuilder can not change the Animation parameters dynamically
+### AnimationBuilder can not import external symbols
 
-So if you wanna do that, you need to do something like this:  
+So if you wanna change Animation dynamically, you have to do something like this:  
 
 ```
 AnimationBuilder.load_string(''.format())
 ```
 
-which is a huge disadvantage IMO.  
+which is a huge disadvantage in my opinion.  
 
-### Everytime you call \_\_getitem\_\_(), it returns a new instance of Animation
+### Everytime you call \_\_getitem\_\_(), it create a new instance
 
-which means  
-
-```python
-anims['key'] is anims['key']
-```
-
-is always False.  
+so  `anims['key'] is anims['key']` is always False.
 
 ## Others
 
