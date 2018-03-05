@@ -109,17 +109,23 @@ class Compiler:
 
     def prepare_dictionary(self, dictionary):
         # sequential
-        sequential = dictionary.get('sequential')
+        sequential = dictionary.pop('S', None)
+        if sequential is None:
+            sequential = dictionary.get('sequential')
         if sequential is not None:
             dictionary['sequential'] = self.prepare_list(sequential)
             return (dictionary, self.compile_sequential, )
         # parallel
-        parallel = dictionary.get('parallel')
+        parallel = dictionary.pop('P', None)
+        if parallel is None:
+            parallel = dictionary.get('parallel')
         if parallel is not None:
             dictionary['parallel'] = self.prepare_list(parallel)
             return (dictionary, self.compile_parallel, )
         # freestyle
-        freestyle = dictionary.get('freestyle')
+        freestyle = dictionary.pop('F', None)
+        if freestyle is None:
+            freestyle = dictionary.get('freestyle')
         if freestyle is not None:
             dictionary['freestyle'] = ast.parse(freestyle).body[0]
             return (dictionary, self.compile_freestyle, )

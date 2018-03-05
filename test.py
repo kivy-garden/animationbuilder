@@ -12,17 +12,34 @@ move_to_right:
 move_to_top:
     top: 600
 
-sequential_test:
+test_sequential:
     sequential:
         - move_to_right
         - duration: 1
         - top: 600
 
-freestyle_test:
+test_sequential_short_form:
+    S:
+        - move_to_right
+        - duration: 1
+        - top: 600
+
+test_freestyle:
     freestyle: "move_to_right & move_to_top"
 
-parallel_test:
+test_freestyle_short_form:
+    F: "move_to_right & move_to_top"
+
+test_parallel:
     parallel:
+        - right: 800
+          d: 1.5
+        - move_to_top
+        - opacity: 0
+          d: 2
+
+test_parallel_short_form:
+    P:
         - right: 800
           d: 1.5
         - move_to_top
@@ -39,6 +56,8 @@ FloatLayout:
         text: 'Start'
 ''')
 button = root.ids.button
-button.bind(on_press=lambda button: anims['freestyle_test'].start(button))
+# button.bind(on_press=lambda button: anims['test_sequential_short_form'].start(button))
+# button.bind(on_press=lambda button: anims['test_parallel_short_form'].start(button))
+button.bind(on_press=lambda button: anims['test_freestyle_short_form'].start(button))
 
 runTouchApp(root)
