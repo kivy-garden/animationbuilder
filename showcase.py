@@ -14,18 +14,15 @@ animations = AnimationBuilder.load_string(r'''
 diagonal:
     right: 800
     top: 600
-square:
+rectangle:
     S:
         - pos: [700, 0]
         - pos: [700, 500]
         - pos: [0, 500]
         - pos: [0, 0]
-square_repeat:
+rectangle_repeat:
     S:
-        - pos: [700, 0]
-        - pos: [700, 500]
-        - pos: [0, 500]
-        - pos: [0, 0]
+        - rectangle
     repeat: True
 ellipse:
     S:
@@ -52,7 +49,6 @@ ellipse:
 ellipse_repeat:
     S:
         - ellipse
-        - ellipse
     repeat: True
 blinking:
     S:
@@ -63,11 +59,11 @@ blinking:
           t: in_out_quad
           d: 0.3
     repeat: True
-rolling360:
+rotate360:
     rotation: 360
-rolling_and_square:
+rotate_and_rectangle:
     P:
-        - square
+        - rectangle
         - rotation: -2700
           d: 4
 in_bounce:
