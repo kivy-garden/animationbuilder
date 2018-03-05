@@ -151,7 +151,7 @@ keep_moving:
   repeat: True
 ```
 
-You can write Python expression with limited operators('+', '&', '()').  
+You can use Python expression with limited operators('+', '&', '()').  
 
 #### sleep()
 
@@ -198,7 +198,7 @@ python3 ./livepreview.py filename.yaml
 ## Requirements
 
 - pyyaml
-- watchdog (optional, only needed if you wanna use livepreview.py)
+- watchdog (optional, only needed by livepreview.py)
 
 ## Notes
 
