@@ -10,15 +10,22 @@ from kivy.graphics.transformation import Matrix
 from animationbuilder import AnimationBuilder
 
 
+WIDTH, HEIGHT = 800, 600
+
 animations = AnimationBuilder.load_string(r'''
 diagonal:
-    right: 800
-    top: 600
+    right: {width}
+    top: {height}
 rectangle:
     S:
-        - pos: [700, 0]
-        - pos: [700, 500]
-        - pos: [0, 500]
+        - right: {width}
+          y: 0
+          d: 1.4
+        - right: {width}
+          top: {height}
+        - x: 0
+          top: {height}
+          d: 1.4
         - pos: [0, 0]
 rectangle_repeat:
     S:
@@ -27,24 +34,24 @@ rectangle_repeat:
 ellipse:
     S:
         - P:
-            - x: 350
+            - center_x: {half_width}
               t: in_sine
             - y: 0
               t: out_sine
         - P:
-            - right: 800
+            - right: {width}
               t: out_sine
-            - y: 250
+            - center_y: {half_height}
               t: in_sine
         - P:
-            - x: 350
+            - center_x: {half_width}
               t: in_sine
-            - top: 600
+            - top: {height}
               t: out_sine
         - P:
             - x: 0
               t: out_sine
-            - y: 250
+            - center_y: {half_height}
               t: in_sine
 ellipse_repeat:
     S:
@@ -68,13 +75,15 @@ rotate_and_rectangle:
           d: 4
 in_bounce:
     P:
-        - right: 800
-          d: 5
-        - y: 500
-          d: 5
+        - right: {width}
+          d: 4
+        - top: {height}
+          d: 4
           t: in_bounce
 
-''')
+'''.format(
+    width=WIDTH, half_width=WIDTH / 2,
+    height=HEIGHT, half_height=HEIGHT / 2))
 
 Builder.load_string(r'''
 <Showcase>:
