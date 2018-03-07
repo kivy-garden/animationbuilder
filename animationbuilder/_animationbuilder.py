@@ -4,14 +4,19 @@ __all__ = ('AnimationBuilder', )
 
 
 import io
-import collections.abc
+from kivy.compat import PY2
+
+if PY2:
+    from collections import Mapping
+else:
+    from collections.abc import Mapping
 
 import yaml
 
 from ._compiler import Compiler
 
 
-class AnimationData(collections.abc.Mapping):
+class AnimationData(Mapping):
 
     def __init__(self, database):
         self.database = database

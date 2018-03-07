@@ -128,7 +128,7 @@ class MenuItem(Factory.BoxLayout):
 
 class Showcase(Factory.FloatLayout):
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(Showcase, self).__init__(**kwargs)
         add_widget = self.ids.menu.add_widget
         for key in animations.keys():
             menuitem = MenuItem(text=key)

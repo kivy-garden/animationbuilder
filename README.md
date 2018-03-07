@@ -225,5 +225,5 @@ so  `anims['key'] is anims['key']` is always False.
 [Youtube](https://www.youtube.com/playlist?list=PLNdhqAjzeEGiF1oLISnCCPoPj1FhZbOAP)  
 
 **Tested Environment**  
-Python 3.5.0  
-Kivy 1.10.0  
+Python 3.5.0 + Kivy 1.10.0  
+Python 2.7.2 + Kivy 1.10.0  
