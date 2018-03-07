@@ -42,7 +42,7 @@ The former looks even worse than the latter. But when you write more complex ani
 
 ```yaml
 test_sequential:
-  sequential:
+  sequential:  # You can use 'S' instead of 'sequential'
     - right: 800
       d: 2
     - top: 600
@@ -56,7 +56,7 @@ move_to_right:
   right: 800
   d: 2
 test_sequential:
-  sequential:
+  S:
     - move_to_right
     - top: 600
       t: in_out_cubic
@@ -69,7 +69,7 @@ move_to_right:
   right: 800
   d: 2
 test_parallel:
-  parallel:
+  parallel:   # You can use 'P' instead of 'parallel'
     - move_to_right
     - top: 600
       t: in_out_cubic
@@ -79,8 +79,8 @@ test_parallel:
 
 ```yaml
 more_nesting:
-  parallel:
-    - sequential:
+  P:
+    - S:
         - opacity: 0
           d: 0.3
           t: in_out_quad
@@ -88,7 +88,7 @@ more_nesting:
           d: 0.3
           t: in_out_quad
       repeat: True
-    - sequential:
+    - S:
         - right: 800
         - top: 600
         - x: 0
@@ -101,12 +101,12 @@ But the code below might be easier to read.
 
 ```yaml
 more_nesting:
-  parallel:
+  P:
     - keep_moving
     - blinking
 
 blinking:
-  sequential:
+  S:
     - opacity: 0
       d: 0.3
       t: in_out_quad
@@ -116,7 +116,7 @@ blinking:
   repeat: True
 
 keep_moving:
-  sequential:
+  S:
     - right: 800
     - top: 600
     - x: 0
@@ -205,11 +205,6 @@ python3 ./livepreview.py filename.yaml
 - watchdog (optional, only needed by livepreview.py)
 
 ## Notes
-
-### short forms
-
-You can type 'S' instead of 'sequential'.  
-Same as 'parallel' -> 'P', 'freestyle' -> 'F'  
 
 ### AnimationBuilder can not import external symbols
 
