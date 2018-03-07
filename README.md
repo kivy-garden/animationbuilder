@@ -125,6 +125,7 @@ keep_moving:
   repeat: True
 ```
 
+<!---
 ### Freestyle
 
 The example above is equivalent to this:  
@@ -185,6 +186,7 @@ move_to_right:
 move_to_top:
   top: 600
 ```
+-->
 
 ## Live Preview
 
