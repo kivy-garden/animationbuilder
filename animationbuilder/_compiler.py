@@ -5,8 +5,6 @@ __all__ = ('Compiler', )
 
 from kivy.animation import Animation
 
-from ._exception import AnimationBuilderException
-
 
 class Compiler:
 
@@ -20,12 +18,7 @@ class Compiler:
         return self.compile_identifier(key)
 
     def compile_identifier(self, identifier):
-        value = self.database.get(identifier)
-        if value is None:
-            raise AnimationBuilderException(
-                "Unknown identifier '{}'".format(identifier))
-        data, handler = value
-        # print(data, handler)
+        data, handler = self.database[identifier]
         return handler(data)
 
     def compile_simple(self, dictionary):
@@ -52,7 +45,7 @@ class Compiler:
         return r
 
     def compile_unsupported(self, data):
-        raise AnimationBuilderException(
+        raise Exception(
             "Unsupported data type: " + str(type(data)))
 
     def prepare_dictionary(self, dictionary):
