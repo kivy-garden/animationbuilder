@@ -143,7 +143,7 @@ python3 ./livepreview.py filename.yaml
 
 ## Notes
 
-### AnimationBuilder can not import external symbols
+### AnimationBuilder is not able to import external symbols
 
 So if you wanna change Animation dynamically, you have to do something like this:  
 
@@ -151,7 +151,7 @@ So if you wanna change Animation dynamically, you have to do something like this
 AnimationBuilder.load_string(''.format())
 ```
 
-which is a huge disadvantage in my opinion.  
+(but the branch 'feature-eval' is able to do that.)  
 
 ### Everytime you call \_\_getitem\_\_(), it create a new instance
 
