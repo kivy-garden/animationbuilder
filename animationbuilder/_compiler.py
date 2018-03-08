@@ -44,7 +44,7 @@ class Compiler:
                 setattr(r, key, value)
         return r
 
-    def compile_unsupported(self, data):
+    def raise_exception_unsupported_data(self, data):
         raise Exception(
             "Unsupported data type: " + str(type(data)))
 
@@ -70,6 +70,6 @@ class Compiler:
         return [
             (item, self.compile_identifier, ) if isinstance(item, str)
             else self.prepare_dictionary(item) if isinstance(item, dict)
-            else (item, self.compile_unsupported, )
+            else self.raise_exception_unsupported_data(item)
             for item in listobj
         ]
