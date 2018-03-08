@@ -125,69 +125,6 @@ keep_moving:
   repeat: True
 ```
 
-<!---
-### Freestyle
-
-The example above is equivalent to this:  
-
-```yaml
-more_nesting:
-  freestyle: "blinking & keep_moving"
-
-blinking:
-  sequential:
-    - opacity: 0
-      d: 0.3
-      t: in_out_quad
-    - opacity: 1
-      d: 0.3
-      t: in_out_quad
-  repeat: True
-
-keep_moving:
-  sequential:
-    - right: 800
-    - top: 600
-    - x: 0
-    - y: 0
-    - d: 1
-  repeat: True
-```
-
-You can use Python expression with limited operators('+', '&', '()').  
-
-#### sleep()
-
-In a freestyle expression, you can use sleep() function  
-
-```yaml
-test:
-  freestyle: "move_to_right + sleep(1) + move_to_top"
-
-move_to_right:
-  right: 800
-
-move_to_top:
-  top: 600
-```
-
-which is equivalent to  
-
-```yaml
-test:
-  sequential:
-    - move_to_right
-    - d: 1
-    - move_to_top
-
-move_to_right:
-  right: 800
-
-move_to_top:
-  top: 600
-```
--->
-
 ## Live Preview
 
 Just like [kviewer](https://github.com/kivy/kivy/blob/master/kivy/tools/kviewer.py), livepreview.py allowing you to dynamically display the animation.

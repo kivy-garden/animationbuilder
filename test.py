@@ -24,12 +24,6 @@ test_sequential_short_form:
         - duration: 1
         - top: 600
 
-# test_freestyle:
-#     freestyle: "move_to_right & move_to_top"
-
-# test_freestyle_short_form:
-#     F: "move_to_right & move_to_top"
-
 test_parallel:
     parallel:
         - right: 800
