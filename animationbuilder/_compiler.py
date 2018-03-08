@@ -25,18 +25,18 @@ class Compiler:
         return Animation(**dictionary)
 
     def compile_sequential(self, dictionary):
-        anims = [handler(data) for (data, handler, ) in dictionary['sequential']]
-        anim = sum(anims[1:], anims[0])
+        anims = (handler(data) for (data, handler, ) in dictionary['sequential'])
+        r = sum(anims, next(anims))
 
         for key, value in dictionary.items():
             if key != 'sequential':
-                setattr(anim, key, value)
-        return anim
+                setattr(r, key, value)
+        return r
 
     def compile_parallel(self, dictionary):
-        anims = [handler(data) for (data, handler, ) in dictionary['parallel']]
-        r = anims[0]
-        for anim in anims[1:]:
+        anims = (handler(data) for (data, handler, ) in dictionary['parallel'])
+        r = next(anims)
+        for anim in anims:
             r &= anim
 
         for key, value in dictionary.items():
