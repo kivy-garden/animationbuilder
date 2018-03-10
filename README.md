@@ -100,9 +100,9 @@ more_nesting:
 But the code below might be easier to read.  
 
 ```yaml
-more_nesting:
+less_nesting:
   P:
-    - keep_moving
+    - move_rectangulary
     - blinking
 
 blinking:
@@ -115,7 +115,7 @@ blinking:
       t: in_out_quad
   repeat: True
 
-keep_moving:
+move_rectangulary:
   S:
     - right: 800
     - top: 600
@@ -143,7 +143,7 @@ python3 ./livepreview.py filename.yaml
 
 ## Notes
 
-### AnimationBuilder is not able to import external symbols
+### AnimationBuilder can not import external symbols
 
 So if you wanna change Animation dynamically, you have to do something like this:  
 
@@ -151,11 +151,16 @@ So if you wanna change Animation dynamically, you have to do something like this
 AnimationBuilder.load_string(''.format())
 ```
 
-(but the branch 'feature-eval' is able to do that.)  
+(but the branch 'feature-eval' is going to have some sort of that function.)  
 
 ### Everytime you call \_\_getitem\_\_(), it create a new instance
 
-so  `anims['key'] is anims['key']` is always False.
+so  `anims['key'] is anims['key']` is always False.  
+
+### Be careful of using some words (YAML in general)
+
+There are so many words that are translated as boolean value.  
+For instance: Yes, No, y, n, ON, OFF  [more info](http://yaml.org/type/bool.html)
 
 ## Others
 
