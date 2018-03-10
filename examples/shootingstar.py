@@ -22,7 +22,7 @@ from animationbuilder import AnimationBuilder
 animations = AnimationBuilder.load_string(r'''
 change_color_randomly:
     color: "eval: get_random_color()"
-    d: "eval: random() * + 1"
+    d: "eval: random() + 1"
 
 random_sleep:
     d: "eval: random()"
