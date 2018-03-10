@@ -7,6 +7,13 @@ from kivy.properties import StringProperty, BooleanProperty
 from kivy.app import runTouchApp
 from kivy.graphics.transformation import Matrix
 
+import sys
+import os.path
+SEARCH_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(SEARCH_PATH)
+import kivy.resources
+kivy.resources.resource_add_path(SEARCH_PATH)
+
 from animationbuilder import AnimationBuilder
 
 
