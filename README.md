@@ -1,5 +1,3 @@
-(I'm not fluent in English. If someone correct my English I'd appreciate.)  
-
 # AnimationBuilder: Easy way of writing Kivy Animations
 
 Using kivy.animation.Animation directly is a pain. AnimationBuilder provides you with easy way.  
