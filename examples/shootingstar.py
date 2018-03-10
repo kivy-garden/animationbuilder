@@ -29,7 +29,7 @@ random_sleep:
 
 star_bounce:
     P:
-        - center_x: "eval: random() * 800"
+        - center_x: "eval: random() * canvas_size[0]"
           d: "locals: bounce_duration"
         - y: 0
           d: "locals: bounce_duration"
@@ -122,17 +122,20 @@ class ShootingStarApp(App):
         Clock.schedule_interval(self.spawn_star, 0.5)
 
     def spawn_star(self, dt):
+        canvas_size = self.root.size
         length = random() * 200 + 20
         star = Star(
             color=get_random_color(),
             size=(length, length, ),
             size_hint=(None, None, ),
-            top=600,
-            right=800 - random() * 100,
+            top=canvas_size[1],
+            right=canvas_size[0] - random() * 100,
             opacity=0)
         root = self.root
         root.add_widget(star)
-        animations.locals['bounce_duration'] = random() * 4 + 2
+        animations.locals.update(
+            bounce_duration=random() * 4 + 2,
+            canvas_size=canvas_size)
         anim = animations['star_main']
         anim.bind(on_complete=lambda *args: root.remove_widget(star))
         anim.start(star)
