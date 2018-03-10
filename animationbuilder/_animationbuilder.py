@@ -20,8 +20,8 @@ from ._compiler import Compiler
 
 class AnimationData(EventDispatcher, Mapping):
 
-    locals = ObjectProperty({}, allownone=True)  # Don't replace with DictProperty
-    globals = ObjectProperty({}, allownone=True)  # Don't replace with DictProperty
+    locals = ObjectProperty()
+    globals = ObjectProperty()
 
     def __init__(self, database, **kwargs):
         self.compiler = Compiler(database)
