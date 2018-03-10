@@ -131,7 +131,7 @@ Just like [kviewer](https://github.com/kivy/kivy/blob/master/kivy/tools/kviewer.
 python3 ./livepreview.py filename.yaml
 ```
 
-![screenshot](screenshot_livepreview.png)  
+![screenshot](livepreview.png)  
 
 
 ## Requirements
