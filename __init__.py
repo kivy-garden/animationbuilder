@@ -1,3 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .animationbuilder import AnimationBuilder
+try:
+    from .animationbuilder import AnimationBuilder
+except ImportError:
+    from animationbuilder import AnimationBuilder
