@@ -123,6 +123,54 @@ move_rectangulary:
   repeat: True
 ```
 
+### eval
+
+You can use python expression.  
+
+```python
+from random import random
+from kivy.utils import get_random_color
+
+from kivy.garden.animationbuilder import AnimationBuilder
+
+
+anims = AnimationBuilder.load_string(r'''
+change_color:
+    color: "eval: get_random_color()"
+    d: "eval: random() + additional_time"
+''')
+anims.locals = {
+    'get_random_color': get_random_color,
+    'random': random,
+}
+anims.globals = {'additional_time': 1, }
+
+anims['change_color'].start(some_widget)
+```
+
+'locals' and 'globals' attributes are directly passed to build-in function 'eval()'.  
+
+### locals & globals
+
+You can access to the 'locals' directly.  
+
+```python
+from kivy.utils import get_random_color
+
+from kivy.garden.animationbuilder import AnimationBuilder
+
+
+anims = AnimationBuilder.load_string(r'''
+change_color:
+    color: "locals: external_value"
+''')
+anims.locals = {'external_value': get_random_color(), }
+
+anims['change_color'].start(some_widget)
+```
+
+Same for 'globals'.  
+
 ## Live Preview
 
 Just like [kviewer](https://github.com/kivy/kivy/blob/master/kivy/tools/kviewer.py), livepreview.py allowing you to dynamically display the animation.
@@ -140,16 +188,6 @@ python3 ./livepreview.py filename.yaml
 - watchdog (optional, only needed by livepreview.py)
 
 ## Notes
-
-### AnimationBuilder can not import external symbols
-
-So if you wanna change Animation dynamically, you have to do something like this:  
-
-```
-AnimationBuilder.load_string(''.format())
-```
-
-(but the branch 'feature-eval' is going to have some sort of that function.)  
 
 ### Everytime you call \_\_getitem\_\_(), it create a new instance
 
