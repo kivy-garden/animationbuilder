@@ -2,10 +2,6 @@
 
 from random import random
 import itertools
-import sys
-import os.path
-SEARCH_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(SEARCH_PATH)
 
 from kivy.lang import Builder
 from kivy.clock import Clock
@@ -14,6 +10,7 @@ from kivy.properties import StringProperty, ListProperty
 from kivy.utils import get_random_color
 from kivy.app import App
 
+import beforetest
 from animationbuilder import AnimationBuilder
 
 
