@@ -10,14 +10,21 @@ sys.path.append(SEARCH_PATH)
 from kivy.lang import Builder
 from kivy.clock import Clock
 from kivy.factory import Factory
-from kivy.properties import (
-    StringProperty, BooleanProperty, ListProperty, NumericProperty,
-    ObjectProperty)
+from kivy.properties import StringProperty, ListProperty
 from kivy.utils import get_random_color
 from kivy.app import App
 
 from animationbuilder import AnimationBuilder
 
+
+class CustomizedMesh(Factory.Mesh):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault('fmt', [(b'vPosition', 2, 'float'), ])
+        # kwargs.setdefault('fmt', [(b'vPosition', 2, 'float'), (b'vTexCoords0', 2, 'float'), ])
+        super(CustomizedMesh, self).__init__(*args, **kwargs)
+
+
+Factory.register('CustomizedMesh', cls=CustomizedMesh)
 
 animations = AnimationBuilder.load_string(r'''
 change_color_randomly:
@@ -60,7 +67,7 @@ Builder.load_string(r'''
 <Polygon>:
     canvas:
         StencilPush:
-        Mesh:
+        CustomizedMesh:
             vertices: self.mesh_vertices
             indices: self.mesh_indices
             mode: self.mesh_mode
@@ -91,25 +98,24 @@ class Star(Polygon):
         1, 4, 6,
         1, 2, 3,
     ]
-    MESH_VERTICES = [
-        .0000, 1.0000, 0, 0,  # => x, y, u, v
-        .2245, .3090, 0, 0,
-        .9511, .3090, 0, 0,
-        .3633, -.1180, 0, 0,
-        .5878, -.8090, 0, 0,
-        # .0000, -.3820, 0, 0,
-        -.5878, -.8090, 0, 0,
-        # -.3633, -.1180, 0, 0,
-        -.9511, .3090, 0, 0,
-        # -.2245, .3090, 0, 0,
-    ]
+    MESH_VERTICES = [value / 2 + 0.5 for value in (
+        .0000, 1.0000,
+        .2245, .3090,
+        .9511, .3090,
+        .3633, -.1180,
+        .5878, -.8090,
+        # .0000, -.3820,
+        -.5878, -.8090,
+        # -.3633, -.1180,
+        -.9511, .3090,
+        # -.2245, .3090,
+    )]
 
     def on_size(self, __, size):
-        half_size = (size[0] / 2, size[1] / 2, 0, 0, )  # => width, height, u, v
         self.mesh_vertices = (
-            length * factor + length
+            length * factor
             for length, factor
-            in zip(itertools.cycle(half_size), self.MESH_VERTICES))
+            in zip(itertools.cycle(size), self.MESH_VERTICES))
 
 
 class ShootingStarApp(App):
