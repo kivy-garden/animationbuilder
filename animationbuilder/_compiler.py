@@ -59,17 +59,6 @@ class Compiler:
         r = next(anims)
         for anim in anims:
             r &= anim
-
-        copied = dictionary.copy()
-        copied.update({
-            key: func_compile(data)
-            for key, (data, func_compile, ) in dictionary['special_keyword'].items()
-        })
-        del copied['special_keyword']
-        del copied['parallel']
-
-        for key, value in copied.items():
-            setattr(r, key, value)
         return r
 
     def raise_exception_unsupported_data(self, data):
