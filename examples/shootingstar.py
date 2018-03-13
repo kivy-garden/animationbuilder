@@ -6,7 +6,7 @@ import itertools
 from kivy.lang import Builder
 from kivy.clock import Clock
 from kivy.factory import Factory
-from kivy.properties import StringProperty, ListProperty
+from kivy.properties import ListProperty
 from kivy.utils import get_random_color
 from kivy.app import App
 
@@ -61,13 +61,13 @@ star_main:
 animations.locals = {'random': random, 'get_random_color': get_random_color, }
 
 Builder.load_string(r'''
-<Polygon>:
+<Star>:
     canvas:
         StencilPush:
         CustomizedMesh:
             vertices: self.mesh_vertices
-            indices: self.mesh_indices
-            mode: self.mesh_mode
+            indices: self.MESH_INDICES
+            mode: 'triangles'
         StencilUse:
         Color:
             rgba: self.color
@@ -76,20 +76,12 @@ Builder.load_string(r'''
             size: self.size
         StencilUnUse:
         StencilPop:
-<Star>:
-    mesh_indices: self.MESH_INDICES
-    mesh_mode: 'triangles'
 ''')
 
 
-class Polygon(Factory.RelativeLayout):
+class Star(Factory.RelativeLayout):
     color = ListProperty()
     mesh_vertices = ListProperty()
-    mesh_indices = ListProperty()
-    mesh_mode = StringProperty()
-
-
-class Star(Polygon):
     MESH_INDICES = [
         0, 3, 5,
         1, 4, 6,
