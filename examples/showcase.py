@@ -7,6 +7,7 @@ from kivy.properties import StringProperty, BooleanProperty
 from kivy.app import runTouchApp
 from kivy.graphics.transformation import Matrix
 
+import beforetest
 from animationbuilder import AnimationBuilder
 
 

@@ -3,6 +3,7 @@
 from kivy.lang import Builder
 from kivy.base import runTouchApp
 
+import beforetest
 from animationbuilder import AnimationBuilder
 
 
