@@ -31,6 +31,6 @@ FloatLayout:
         text: 'Start'
 ''')
 button = root.ids.button
-button.bind(on_press=lambda button: anim.start(button))
+button.bind(on_press=anim.start)
 
 runTouchApp(root)

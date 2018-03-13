@@ -39,7 +39,7 @@ FloatLayout:
         text: 'anim2'
         pos: 700, 0
 ''')
-root.ids.button1.bind(on_press=lambda button: anim1.start(button))
-root.ids.button2.bind(on_press=lambda button: anim2.start(button))
+root.ids.button1.bind(on_press=anim1.start)
+root.ids.button2.bind(on_press=anim2.start)
 
 runTouchApp(root)
