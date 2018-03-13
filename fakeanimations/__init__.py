@@ -29,5 +29,7 @@ anim.start(some_widget)
 
 try:
     from ._callable import Callable
+    from ._exec import Exec
 except ImportError:
     from _callable import Callable
+    from _exec import Exec
