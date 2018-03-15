@@ -9,46 +9,60 @@ from animationbuilder.fakeanimation import Callable
 
 
 anim1 = (
-    Callable(callable=lambda __: print('start')) +
+    Callable(callable=lambda __: print('anim1: start')) +
     Animation(right=800) +
-    Callable(callable=lambda __: print('right is 800')) +
+    Callable(callable=lambda __: print('anim1: right is 800')) +
     Animation(top=600) +
-    Callable(callable=lambda __: print('top is 600')) +
-    Callable(callable=lambda __: print('end'))
+    Callable(callable=lambda __: print('anim1: top is 600')) +
+    Animation(x=0) +
+    Callable(callable=lambda __: print('anim1: x is 0')) +
+    Animation(y=0) +
+    Callable(callable=lambda __: print('anim1: y is 0')) +
+    Callable(callable=lambda __: print('anim1: end'))
 )
 anim2 = (
-    (
-        Animation(opacity=0) +
-        Callable(callable=lambda __: print('opacity is 0')) +
-        Animation(opacity=1) +
-        Callable(callable=lambda __: print('opacity is 1'))
-    ) &
-    (
-        Animation(x=0, d=0.7) +
-        Callable(callable=lambda __: print('x is 0')) +
-        Animation(top=600, d=0.7) +
-        Callable(callable=lambda __: print('top is 600')) +
-        Animation(right=800, d=0.7) +
-        Callable(callable=lambda __: print('right is 800'))
-    )
+    Callable(callable=lambda __: print('anim2: start')) +
+    Animation(x=0, d=0.7) +
+    Callable(callable=lambda __: print('anim2: right is 800')) +
+    Animation(top=600, d=0.7) +
+    Callable(callable=lambda __: print('anim2: top is 600')) +
+    Animation(right=800, d=0.7) +
+    Callable(callable=lambda __: print('anim2: x is 0')) +
+    Animation(y=0, d=0.7) +
+    Callable(callable=lambda __: print('anim2: y is 0')) +
+    Callable(callable=lambda __: print('anim2: end'))
 )
 
 
 root = Builder.load_string(r'''
 FloatLayout:
-    Button:
-        id: button1
+    Image:
+        id: image1
+        source: 'kivy-logo-black-128.png'
         size_hint: None, None
-        size: 100, 100
-        text: 'sequential'
+        size: self.texture_size
     Button:
-        id: button2
+        id: button
         size_hint: None, None
-        size: 100, 100
+        center_x: 400
+        text: 'start'
+    Image:
+        id: image2
+        source: 'kivy-logo-black-128.png'
+        size_hint: None, None
+        size: self.texture_size
         right: 800
-        text: 'sequential\n&\nparallel'
 ''')
-root.ids.button1.bind(on_press=anim1.start)
-root.ids.button2.bind(on_press=anim2.start)
+image1 = root.ids.image1
+image2 = root.ids.image2
+button = root.ids.button
+
+
+def on_button_press(button):
+    anim1.start(image1)
+    anim2.start(image2)
+
+
+button.bind(on_press=on_button_press)
 
 runTouchApp(root)
