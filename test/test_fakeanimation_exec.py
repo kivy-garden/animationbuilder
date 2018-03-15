@@ -5,7 +5,7 @@ from kivy.base import runTouchApp
 from kivy.animation import Animation
 
 import beforetest
-from fakeanimations import Exec
+from animationbuilder.fakeanimation import Exec
 
 
 anim = (

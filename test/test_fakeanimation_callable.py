@@ -5,7 +5,7 @@ from kivy.base import runTouchApp
 from kivy.animation import Animation
 
 import beforetest
-from fakeanimations import Callable
+from animationbuilder.fakeanimation import Callable
 
 
 anim1 = (
