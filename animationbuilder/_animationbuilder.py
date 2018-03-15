@@ -5,8 +5,6 @@ __all__ = ('AnimationBuilder', )
 
 import io
 from kivy.compat import PY2
-from kivy.event import EventDispatcher
-from kivy.properties import ObjectProperty
 
 if PY2:
     from collections import Mapping
@@ -18,10 +16,7 @@ import yaml
 from ._compiler import Compiler
 
 
-class AnimationData(EventDispatcher, Mapping):
-
-    locals = ObjectProperty()
-    globals = ObjectProperty()
+class AnimationData(Mapping):
 
     def __init__(self, database, **kwargs):
         self.compiler = Compiler(database)
@@ -38,11 +33,21 @@ class AnimationData(EventDispatcher, Mapping):
     def __len__(self):
         return len(self.database)
 
-    def on_locals(self, __, value):
+    def _get_locals(self):
+        return self.compiler.locals
+
+    def _set_locals(self, value):
         self.compiler.locals = value
 
-    def on_globals(self, __, value):
+    locals = property(_get_locals, _set_locals)
+
+    def _get_globals(self):
+        return self.compiler.globals
+
+    def _set_globals(self, value):
         self.compiler.globals = value
+
+    globals = property(_get_globals, _set_globals)
 
 
 class AnimationBuilder:
