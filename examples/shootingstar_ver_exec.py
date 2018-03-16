@@ -28,7 +28,8 @@ change_color_randomly:
     d: "eval: random() + 1"
 
 random_sleep:
-    d: "eval: random()"
+    d: 0.01
+    s: "eval: random()"
 
 star_bounce:
     P:
