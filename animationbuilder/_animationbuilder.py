@@ -19,33 +19,33 @@ from ._compiler import Compiler
 class AnimationData(Mapping):
 
     def __init__(self, database, **kwargs):
-        self.compiler = Compiler(database)
+        self._compiler = Compiler(database)
         super(AnimationData, self).__init__(**kwargs)
-        self.compile = self.compiler.compile
-        self.database = database
+        self._compile = self._compiler.compile
+        self._database = database
 
     def __getitem__(self, key):
-        return self.compile(key)
+        return self._compile(key)
 
     def __iter__(self):
-        return iter(self.database)
+        return iter(self._database)
 
     def __len__(self):
-        return len(self.database)
+        return len(self._database)
 
     def _get_locals(self):
-        return self.compiler.locals
+        return self._compiler.locals
 
     def _set_locals(self, value):
-        self.compiler.locals = value
+        self._compiler.locals = value
 
     locals = property(_get_locals, _set_locals)
 
     def _get_globals(self):
-        return self.compiler.globals
+        return self._compiler.globals
 
     def _set_globals(self, value):
-        self.compiler.globals = value
+        self._compiler.globals = value
 
     globals = property(_get_globals, _set_globals)
 
