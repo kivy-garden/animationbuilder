@@ -23,6 +23,8 @@ class AnimationData(Mapping):
         super(AnimationData, self).__init__(**kwargs)
         self._compile = self._compiler.compile
         self._database = database
+        if '__init__' in database:
+            self._compile('__init__')
 
     def __getitem__(self, key):
         return self._compile(key)

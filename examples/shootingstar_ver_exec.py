@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-from random import random
 import itertools
 
 from kivy.lang import Builder
 from kivy.clock import Clock
 from kivy.factory import Factory
 from kivy.properties import ListProperty
-from kivy.utils import get_random_color
 from kivy.app import App
 
 import beforetest
@@ -23,6 +21,12 @@ class CustomizedMesh(Factory.Mesh):
 Factory.register('CustomizedMesh', cls=CustomizedMesh)
 
 ANIMATION_CODE = r'''
+# __init__ is special, will be automatically instanciated when ANIMATION_CODE is loaded.
+__init__:
+    exec_on_creation: |
+        from random import random
+        from kivy.utils import get_random_color
+
 change_color_randomly:
     color: "eval: get_random_color()"
     d: "eval: random() + 1"
@@ -132,8 +136,6 @@ class ShootingStarApp(App):
         self.anims = anims = AnimationBuilder.load_string(ANIMATION_CODE)
         self.root = root = Factory.FloatLayout()
         anims.locals.update(
-            random=random,
-            get_random_color=get_random_color,
             parent=root,
         )
         return root
