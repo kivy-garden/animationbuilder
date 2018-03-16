@@ -30,13 +30,17 @@ class Callable(EventDispatcher):
     def start(self, widget):
         self.dispatch('on_start', widget)
         self.callable(widget)
-        Clock.schedule_once(lambda dt: self.dispatch('on_complete', widget), 0)
+        self._clock_event = Clock.schedule_once(
+            lambda dt: self.dispatch('on_complete', widget), 0)
 
     def stop(self, widget):
         pass
 
     def cancel(self, widget):
-        pass
+        clock_event = getattr(self, '_clock_event', None)
+        if clock_event is not None:
+            clock_event.cancel()
+            self._clock_event = None
 
     def stop_property(self, widget, prop):
         pass
