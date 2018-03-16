@@ -3,6 +3,7 @@
 __all__ = ('Callable', )
 
 from kivy.event import EventDispatcher
+from kivy.properties import ObjectProperty
 from kivy.clock import Clock
 from kivy.animation import Parallel, Sequence, AnimationTransition
 
@@ -12,9 +13,7 @@ class Callable(EventDispatcher):
 
     __events__ = ('on_start', 'on_progress', 'on_complete')
 
-    def __init__(self, **kwargs):
-        super(EventDispatcher, self).__init__()
-        self.callable = kwargs['callable']
+    callable = ObjectProperty()
 
     @property
     def duration(self):
