@@ -4,8 +4,8 @@
 Fake Animation
 ==============
 
-When you wanna do some non-Animation stuff between Animations, you'd write like
-this:
+When you wanna do some non-Animation stuff between two Animations, you'd write
+like this:
 
 anim2 = Animation(...)
 def non_animation_stuff(anim, widget):
