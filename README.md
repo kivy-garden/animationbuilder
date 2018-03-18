@@ -139,11 +139,12 @@ change_color:
     color: "eval: get_random_color()"
     d: "eval: random() + additional_time"
 ''')
-anims.locals = {
+anims.globals = {
     'get_random_color': get_random_color,
     'random': random,
+    'additional_time': 1,
 }
-anims.globals = {'additional_time': 1, }
+# anims.locals = None
 
 anims['change_color'].start(some_widget)
 ```
@@ -152,7 +153,7 @@ anims['change_color'].start(some_widget)
 
 ### locals & globals
 
-You can access to the 'locals' directly.  
+You can access to the 'globals' directly.  
 
 ```python
 from kivy.utils import get_random_color
@@ -162,14 +163,14 @@ from kivy.garden.animationbuilder import AnimationBuilder
 
 anims = AnimationBuilder.load_string(r'''
 change_color:
-    color: "locals: external_value"
+    color: "globals: external_value"
 ''')
-anims.locals = {'external_value': get_random_color(), }
+anims.globals = {'external_value': get_random_color(), }
 
 anims['change_color'].start(some_widget)
 ```
 
-Same for 'globals'.  
+Same for 'locals'.  
 
 ## Live Preview
 
@@ -197,6 +198,29 @@ so  `anims['key'] is anims['key']` is always False.
 
 There are so many words that are translated as boolean value.  
 For instance: Yes, No, y, n, ON, OFF  [more info](http://yaml.org/type/bool.html)
+
+### Be careful of using `locals`
+
+The code below works fine, when `locals = None`(default) and `globals = {}`(default).  
+
+```yaml:
+__init__:
+  exec_on_creation: |
+    from random import random
+    def random_pos():
+      return (random() * 300, random() * 300, )
+
+main:
+  pos: "eval: random_pos()"
+```
+
+But it doesn't work when `locals = {}` and `globals = None`. Same for when `locals = {}` and `globals = {}`.  
+
+```text:
+NameError: name 'random' is not defined
+```
+
+It seems `exec` doesn't look up `locals` when resolving `random` during excution of `random_pos()`. So unless you know how `locals` and `globals` works in `exec()`, should not use `locals`.  
 
 ## Others
 

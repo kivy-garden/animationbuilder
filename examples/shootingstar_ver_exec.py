@@ -133,11 +133,9 @@ class Star(Factory.RelativeLayout):
 class ShootingStarApp(App):
 
     def build(self):
-        self.anims = anims = AnimationBuilder.load_string(ANIMATION_CODE)
         self.root = root = Factory.FloatLayout()
-        anims.locals.update(
-            parent=root,
-        )
+        self.anims = AnimationBuilder.load_string(
+            ANIMATION_CODE, globals={'parent': root, })
         return root
 
     def on_start(self):

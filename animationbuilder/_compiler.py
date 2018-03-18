@@ -21,7 +21,7 @@ class Compiler:
             key: self.prepare_dictionary(data)
             for key, data in database.items()
         }
-        self.locals = kwargs.get('locals', {})
+        self.locals = kwargs.get('locals', None)
         self.globals = kwargs.get('globals', {})
 
     @property
