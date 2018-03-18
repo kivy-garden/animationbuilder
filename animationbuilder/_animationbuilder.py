@@ -19,12 +19,11 @@ from ._compiler import Compiler
 class AnimationData(Mapping):
 
     def __init__(self, database, **kwargs):
-        self._compiler = Compiler(database)
-        super(AnimationData, self).__init__(**kwargs)
+        super(AnimationData, self).__init__()
+        self._compiler = Compiler(database, **kwargs)
         self._compile = self._compiler.compile
         self._database = database
-        if '__init__' in database:
-            self._compile('__init__')
+        self.get('__init__')
 
     def __getitem__(self, key):
         return self._compile(key)
@@ -55,14 +54,15 @@ class AnimationData(Mapping):
 class AnimationBuilder:
 
     @staticmethod
-    def load_file(filepath):
+    def load_file(filepath, **kwargs):
+        '''Available keyword arguments: globals, locals'''
         with io.open(filepath, 'rt', encoding='utf_8') as stream:
-            return AnimationBuilder.load_stream(stream)
+            return AnimationBuilder.load_stream(stream, **kwargs)
 
     @staticmethod
-    def load_string(s):
-        return AnimationBuilder.load_stream(s)
+    def load_string(s, **kwargs):
+        return AnimationBuilder.load_stream(s, **kwargs)
 
     @staticmethod
-    def load_stream(stream):
-        return AnimationData(yaml.load(stream))
+    def load_stream(stream, **kwargs):
+        return AnimationData(yaml.load(stream), **kwargs)

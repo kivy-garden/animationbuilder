@@ -12,7 +12,7 @@ class Compiler:
 
     SPECIAL_KEYWORDS = 'eval locals globals exec'.split()
 
-    def __init__(self, database):
+    def __init__(self, database, **kwargs):
         self.special_keyword_preparers = {
             keyword + ': ': getattr(self, 'prepare_' + keyword)
             for keyword in self.SPECIAL_KEYWORDS
@@ -21,8 +21,8 @@ class Compiler:
             key: self.prepare_dictionary(data)
             for key, data in database.items()
         }
-        self.locals = {}
-        self.globals = {}
+        self.locals = kwargs.get('locals', {})
+        self.globals = kwargs.get('globals', {})
 
     def compile(self, key):
         return self.compile_identifier(key)
