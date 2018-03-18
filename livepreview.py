@@ -2,7 +2,7 @@
 (This file is based on kivy/tools/kviewer.py)
 
 livepreview
-=======
+===========
 
 livepreview is a simple tool allowing you to dynamically display
 a anim file, taking its changes into account (thanks to watchdog).
@@ -21,16 +21,18 @@ file changes.
 '''
 
 from sys import argv
+import io
 from kivy.lang import Builder
 from kivy.factory import Factory
 from kivy.app import App
 from kivy.clock import Clock, mainthread
 from kivy.uix.label import Label
 from kivy.animation import Animation
+from kivy.graphics.transformation import Matrix
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
-from os.path import dirname, basename, join
+from os.path import dirname, basename, join, exists
 
 from animationbuilder import AnimationBuilder
 
@@ -43,14 +45,30 @@ if len(argv) != 2:
 PATH = dirname(argv[1])
 TARGET = basename(argv[1])
 
+# create empty file if it doesn't exist
+if not exists(argv[1]):
+    stream = io.open(argv[1], 'wb')
+    stream.close()
 
 Builder.load_string(r'''
 <AnimationTarget@Scatter>:
     size_hint: None, None
     Image:
         size: root.size
+        allow_stretch: True
         source: 'kivy-logo-black-128.png'
 ''')
+
+
+def reset_widget(widget):
+    Animation.cancel_all(widget)
+    widget.pos = (0, 0, )
+    widget.pos_hint = {}
+    widget.size = (100, 100, )
+    widget.size_hint = (None, None, )
+    widget.opacity = 1
+    if isinstance(widget, Factory.Scatter):
+        widget.transform = Matrix()
 
 
 class AnimHandler(FileSystemEventHandler):
@@ -70,24 +88,29 @@ class AnimViewerApp(App):
         o.schedule(AnimHandler(self.update, TARGET), PATH)
         o.start()
         Clock.schedule_once(self.update, 1)
-        self.root = Factory.FloatLayout()
-        return self.root
+        self.root = root = Factory.FloatLayout()
+        self.target = target = Factory.AnimationTarget()
+        root.add_widget(target)
+        return root
 
-    def schedule_update(self, *args):
-        Clock.schedule_once(self.update, 1)
+    def play_animation(self, *args):
+        target = self.target
+        reset_widget(target)
+        # when the animation completed, replay automatically
+        anim = self.anims['main'] + Animation(d=1)
+        anim.bind(on_complete=self.play_animation)
+        anim.start(target)
 
     @mainthread
     def update(self, *args):
         root = self.root
         for child in root.children[:]:
-            Animation.cancel_all(child)
             root.remove_widget(child)
+        root.add_widget(self.target)
         try:
-            anim = AnimationBuilder.load_file(join(PATH, TARGET))['preview']
-            anim.bind(on_complete=self.schedule_update)
-            child = Factory.AnimationTarget()
-            root.add_widget(child)
-            anim.start(child)
+            self.anims = AnimationBuilder.load_file(
+                join(PATH, TARGET), globals={'parent': root, })
+            self.play_animation()
         except Exception as e:
             root.add_widget(Label(text=(
                 e.message if getattr(e, 'message', None) else str(e)
