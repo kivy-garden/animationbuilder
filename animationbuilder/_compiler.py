@@ -24,8 +24,9 @@ class Compiler:
         self.locals = kwargs.get('locals', {})
         self.globals = kwargs.get('globals', {})
 
-    def compile(self, key):
-        return self.compile_identifier(key)
+    @property
+    def compile(self):
+        return self.compile_identifier
 
     def compile_identifier(self, identifier):
         data, func_compile = self.database[identifier]
@@ -69,13 +70,13 @@ class Compiler:
         raise Exception(
             "Unsupported data type: " + str(type(data)))
 
-    def compile_eval(self, codeobject):
+    def do_eval(self, codeobject):
         return eval(codeobject, self.globals, self.locals)
 
-    def compile_locals(self, key):
+    def resolve_locals(self, key):
         return self.locals[key]
 
-    def compile_globals(self, key):
+    def resolve_globals(self, key):
         return self.globals[key]
 
     def compile_exec(self, codeobject):
@@ -88,13 +89,13 @@ class Compiler:
         exec(codeobject, self.globals, self.locals)
 
     def prepare_eval(self, string):
-        return (compile(string, '<string>', 'eval'), self.compile_eval)
+        return (compile(string, '<string>', 'eval'), self.do_eval)
 
     def prepare_locals(self, string):
-        return (string, self.compile_locals)
+        return (string, self.resolve_locals)
 
     def prepare_globals(self, string):
-        return (string, self.compile_globals)
+        return (string, self.resolve_globals)
 
     def prepare_exec(self, string):
         return (compile(string, '<string>', 'exec'), self.compile_exec)
