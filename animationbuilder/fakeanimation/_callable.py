@@ -31,7 +31,7 @@ class Callable(EventDispatcher):
         self.dispatch('on_start', widget)
         self.callable(widget)
         self._clock_event = Clock.schedule_once(
-            lambda dt: self.dispatch('on_complete', widget), 0)
+            lambda dt: self.dispatch('on_complete', widget), -1)
 
     def stop(self, widget):
         pass
@@ -61,7 +61,7 @@ class Callable(EventDispatcher):
         pass
 
     def on_complete(self, widget):
-        pass
+        self._clock_event = None
 
     def __add__(self, animation):
         return Sequence(self, animation)
