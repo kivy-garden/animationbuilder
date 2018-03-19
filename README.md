@@ -203,7 +203,7 @@ For instance: Yes, No, y, n, ON, OFF  [more info](http://yaml.org/type/bool.html
 
 The code below works fine, when `locals = None`(default) and `globals = {}`(default).  
 
-```yaml:
+```yaml
 __init__:
   exec_on_creation: |
     from random import random
@@ -216,11 +216,11 @@ main:
 
 But it doesn't work when `locals = {}` and `globals = None`. Same for when `locals = {}` and `globals = {}`.  
 
-```text:
+```text
 NameError: name 'random' is not defined
 ```
 
-It seems `exec` doesn't look up `locals` when resolving `random` during excution of `random_pos()`. So unless you know how `locals` and `globals` works in `exec()`, should not use `locals`.  
+It seems `eval()` doesn't look `locals` up when resolving `random` during excution of `random_pos()`. So unless you know how `locals` and `globals` works in `eval()` and `exec()`, should not use `locals`.  
 
 ## Others
 
