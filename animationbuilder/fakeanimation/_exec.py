@@ -19,5 +19,8 @@ class Exec(Callable):
 
     def callback(self, widget):
         globals = self.globals
-        globals['widget'] = widget
-        exec(self.codeobject, globals, self.locals)
+        locals = self.locals
+        target = locals if globals is None else globals
+        if target is not None:
+            target['widget'] = widget
+        exec(self.codeobject, globals, locals)
