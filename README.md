@@ -205,7 +205,7 @@ The code below works fine, when `locals = None`(default) and `globals = {}`(defa
 
 ```yaml
 __init__:
-  exec_on_creation: |
+  exec_on_create: |
     from random import random
     def random_pos():
       return (random() * 300, random() * 300, )

@@ -102,7 +102,7 @@ class Compiler:
 
     def prepare_dictionary(self, dictionary):
         # 'string' will be excuted when create a animation
-        string = dictionary.pop('exec_on_creation', None)
+        string = dictionary.pop('exec_on_create', None)
         if string is not None:
             return (compile(string, '<string>', 'exec'), self.do_exec)
 

@@ -11,7 +11,7 @@ from animationbuilder import AnimationBuilder
 anims = AnimationBuilder.load_string(r'''
 test_exec:
     S:
-        - exec_on_creation: |
+        - exec_on_create: |
             from random import random
             destination = (random() * 700, random() * 500, )
         # `widget` is a special identifier that indicates the widget, which

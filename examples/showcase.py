@@ -35,7 +35,7 @@ rectangle_repeat:
 
 _ellipse:
     S:
-        - exec_on_creation: |
+        - exec_on_create: |
             pw = parent.width
             ph = parent.height
             phw = pw / 2
