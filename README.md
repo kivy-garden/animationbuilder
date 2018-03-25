@@ -146,9 +146,11 @@ anims.globals = {
 }
 # anims.locals = None
 
-anims['change_color'].start(some_widget)
+anim = anims['change_color']  # This is where all `eval`s are excuted.
+anim.start(some_widget)
 ```
 
+`eval` is excuted when animation is created.  
 'locals' and 'globals' attributes are directly passed to build-in function 'eval()'.  
 
 ### locals & globals
@@ -167,10 +169,70 @@ change_color:
 ''')
 anims.globals = {'external_value': get_random_color(), }
 
-anims['change_color'].start(some_widget)
+anim = anims['change_color']  # This is where all `globals` and `locals` are evaluated.
+anim.start(some_widget)
 ```
 
 Same for 'locals'.  
+
+### exec
+
+You can use python statements.  
+
+```python
+from kivy.garden.animationbuilder import AnimationBuilder
+
+
+anims = AnimationBuilder.load_string(r'''
+some_animation:
+    S:
+        - exec: |  # This is one of methods to write multiline string in YAML.
+            widget.pos = (500, 500, )
+            widget.opacity = 1
+        - pos: [0, 0, ]
+          opacity: 0.2
+        - "exec: widget.opacity = 1"
+        - exec: ""
+''')
+
+anims['some_animation'].start(some_widget)
+```
+
+Unlike `eval`, `exec` is a part of animation. And by using a identifier 'widget', you can access to the widget, which associated to the animation.  
+Like `eval` you can use 'locals' and 'globals' attributes.  
+
+### exec_on_create
+
+`exec_on_create` is the same as `exec` except it's excuted when animation is created. So obviously `exec_on_create` is not a part of animation.  
+This is useful when you wanna share values inside a animation.  
+
+```python
+from kivy.garden.animationbuilder import AnimationBuilder
+
+
+anims = AnimationBuilder.load_string(r'''
+__init__:
+    exec_on_create: |
+        from random import random
+
+some_animation:
+    S:
+        - exec_on_create: "shared_value = random() + 1"
+        - P:
+            - pos: [500, 500]
+              d: "eval: shared_value"
+            - opacity: 0
+              d: "eval: shared_value"
+''')
+
+anims['some_animation'].start(some_widget)
+```
+
+
+### __init__
+
+Animation named '\_\_init\_\_' is special. It's automatically created when yaml data is loaded. (In the example above, it's AnimationBuilder.load_string())
+
 
 ## Live Preview
 
