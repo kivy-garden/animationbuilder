@@ -23,7 +23,7 @@ anims.locals = external_params = {
 }
 anim1 = anims['test']
 external_params['external_value'] = (0, 500, )
-# Animation instance can't be shared, so create new one.
+# `Animation` can't be shared between two `Parallel`s , so create same one.
 external_params['external_animation'] = Animation(opacity=0, d=1.5)
 anim2 = anims['test']
 

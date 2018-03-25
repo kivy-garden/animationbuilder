@@ -11,53 +11,68 @@ import beforetest
 from animationbuilder import AnimationBuilder
 
 
-WIDTH, HEIGHT = 800, 600
-
 animations = AnimationBuilder.load_string(r'''
 diagonal:
-    right: {width}
-    top: {height}
+    right: "eval: parent.width"
+    top: "eval: parent.height"
+
 rectangle:
     S:
-        - right: {width}
+        - right: "eval: parent.width"
           y: 0
           d: 1.4
-        - right: {width}
-          top: {height}
+        - right: "eval: parent.width"
+          top: "eval: parent.height"
         - x: 0
-          top: {height}
+          top: "eval: parent.height"
           d: 1.4
         - pos: [0, 0]
+
 rectangle_repeat:
     S:
         - rectangle
     repeat: True
-ellipse:
+
+_ellipse:
     S:
+        - exec_on_create: |
+            pw = parent.width
+            ph = parent.height
+            phw = pw / 2
+            phh = ph / 2
         - P:
-            - center_x: {half_width}
+            - center_x: "eval: phw"
               t: in_sine
             - y: 0
               t: out_sine
         - P:
-            - right: {width}
+            - right: "eval: pw"
               t: out_sine
-            - center_y: {half_height}
+            - center_y: "eval: phh"
               t: in_sine
         - P:
-            - center_x: {half_width}
+            - center_x: "eval: phw"
               t: in_sine
-            - top: {height}
+            - top: "eval: ph"
               t: out_sine
         - P:
             - x: 0
               t: out_sine
-            - center_y: {half_height}
+            - center_y: "eval: phh"
               t: in_sine
+
+ellipse:
+    S:
+        - "exec: widget.center_y = parent.height / 2"
+        - _ellipse
+
 ellipse_repeat:
     S:
-        - ellipse
-    repeat: True
+        - "exec: widget.center_y = parent.height / 2"
+        - S:
+            - _ellipse
+          repeat: True
+
 blinking:
     S:
         - opacity: 0
@@ -67,24 +82,25 @@ blinking:
           t: in_out_quad
           d: 0.3
     repeat: True
+
 rotate360:
     rotation: 360
+
 rotate_and_rectangle:
     P:
         - rectangle
         - rotation: -2700
           d: 4
+
 in_bounce:
     P:
-        - right: {width}
+        - right: "eval: parent.width"
           d: 4
-        - top: {height}
+        - top: "eval: parent.height"
           d: 4
           t: in_bounce
 
-'''.format(
-    width=WIDTH, half_width=WIDTH / 2,
-    height=HEIGHT, half_height=HEIGHT / 2))
+''')
 
 Builder.load_string(r'''
 <Showcase>:
@@ -132,6 +148,8 @@ class Showcase(Factory.FloatLayout):
         super(Showcase, self).__init__(**kwargs)
         add_widget = self.ids.menu.add_widget
         for key in animations.keys():
+            if key.startswith('_'):
+                continue
             menuitem = MenuItem(text=key)
             menuitem.bind(is_checked=self.on_menuitem_clicked)
             add_widget(menuitem)
@@ -150,4 +168,6 @@ class Showcase(Factory.FloatLayout):
             self.play_animation(menuitem.text)
 
 
-runTouchApp(Showcase())
+root = Showcase()
+animations.locals['parent'] = root
+runTouchApp(root)
