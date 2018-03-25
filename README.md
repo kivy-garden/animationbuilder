@@ -229,7 +229,7 @@ anims['some_animation'].start(some_widget)
 ```
 
 
-### __init__
+### \_\_init\_\_
 
 Animation named '\_\_init\_\_' is special. It's automatically created when yaml data is loaded. (In the example above, it's AnimationBuilder.load_string())
 
