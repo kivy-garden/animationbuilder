@@ -212,6 +212,7 @@ some_animation:
               d: "eval: shared_value"
             - opacity: 0
               d: "eval: shared_value"
+              t: out_sine
 ```
 
 
