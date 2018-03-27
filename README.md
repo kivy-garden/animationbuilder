@@ -1,6 +1,6 @@
 # AnimationBuilder: Easy way of writing Kivy Animations
 
-Using kivy.animation.Animation directly is a pain. AnimationBuilder provides you with easy way.  
+Using `kivy.animation.Animation` directly is a pain. `AnimationBuilder` provides you with easy way.  
 
 ![screenshot](screenshot.png)
 
@@ -151,7 +151,7 @@ anim.start(some_widget)
 ```
 
 `eval` is excuted when animation is created.  
-'locals' and 'globals' attributes are directly passed to build-in function 'eval()'.  
+'locals' and 'globals' attributes are directly passed to built-in function 'eval()'.  
 
 ### locals & globals
 
@@ -179,11 +179,7 @@ Same for 'locals'.
 
 You can use python statements.  
 
-```python
-from kivy.garden.animationbuilder import AnimationBuilder
-
-
-anims = AnimationBuilder.load_string(r'''
+```yaml
 some_animation:
     S:
         - exec: |  # This is one of methods to write multiline string in YAML.
@@ -193,9 +189,6 @@ some_animation:
           opacity: 0.2
         - "exec: widget.opacity = 1"
         - exec: ""
-''')
-
-anims['some_animation'].start(some_widget)
 ```
 
 Unlike `eval`, `exec` is a part of animation. And by using a identifier 'widget', you can access to the widget, which associated to the animation.  
@@ -206,11 +199,7 @@ Like `eval` you can use 'locals' and 'globals' attributes.
 `exec_on_create` is the same as `exec` except it's excuted when animation is created. So obviously `exec_on_create` is not a part of animation.  
 This is useful when you wanna share values inside a animation.  
 
-```python
-from kivy.garden.animationbuilder import AnimationBuilder
-
-
-anims = AnimationBuilder.load_string(r'''
+```yaml
 __init__:
     exec_on_create: |
         from random import random
@@ -223,9 +212,6 @@ some_animation:
               d: "eval: shared_value"
             - opacity: 0
               d: "eval: shared_value"
-''')
-
-anims['some_animation'].start(some_widget)
 ```
 
 
