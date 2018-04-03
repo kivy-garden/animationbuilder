@@ -169,5 +169,5 @@ class Showcase(Factory.FloatLayout):
 
 
 root = Showcase()
-animations.locals['parent'] = root
+animations.globals['parent'] = root
 runTouchApp(root)
