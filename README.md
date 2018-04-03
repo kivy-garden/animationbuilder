@@ -218,7 +218,7 @@ some_animation:
 
 ### \_\_init\_\_
 
-Animation named '\_\_init\_\_' is special. It's automatically created when yaml data is loaded. (In the example above, it's AnimationBuilder.load_string())
+Animation named '\_\_init\_\_' is special. It's automatically created when YAML data is loaded.
 
 
 ## Live Preview
