@@ -3,8 +3,7 @@
 __all__ = ('Compiler', )
 
 
-from kivy.animation import Animation
-
+from ._replacement_of_the_animation_class import Animation
 from .fakeanimation import Exec as ExecAnimation
 
 

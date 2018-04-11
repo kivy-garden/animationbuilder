@@ -5,7 +5,8 @@ __all__ = ('Callable', )
 from kivy.event import EventDispatcher
 from kivy.properties import ObjectProperty
 from kivy.clock import Clock
-from kivy.animation import Parallel, Sequence, AnimationTransition
+from kivy.animation import AnimationTransition
+from .._replacement_of_the_animation_class import Parallel, Sequence
 
 
 class Callable(EventDispatcher):
