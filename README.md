@@ -25,7 +25,7 @@ anims['move_to_right'].start(some_widget1)
 anims['move_to_top'].start(some_widget2)
 ```
 
-The code above is equivalent to  
+The code above is equivalent to:  
 
 ```python
 from kivy.animation import Animation
@@ -146,16 +146,15 @@ anims.globals = {
 }
 # anims.locals = None
 
-anim = anims['change_color']  # This is where all `eval`s are excuted.
+anim = anims['change_color']  # This is where `eval`s are excuted.
 anim.start(some_widget)
 ```
 
-`eval` is excuted when animation is created.  
-'locals' and 'globals' attributes are directly passed to built-in function 'eval()'.  
+`eval` is excuted when animation is created. `locals` and `globals` attributes are directly passed to built-in function `eval()`.  
 
 ### locals & globals
 
-You can access to the 'globals' directly.  
+You can access to the `globals` and `locals` directly.  
 
 ```python
 from kivy.utils import get_random_color
@@ -169,11 +168,11 @@ change_color:
 ''')
 anims.globals = {'external_value': get_random_color(), }
 
-anim = anims['change_color']  # This is where all `globals` and `locals` are evaluated.
+anim = anims['change_color']  # This is where `globals` and `locals` are evaluated.
 anim.start(some_widget)
 ```
 
-Same for 'locals'.  
+Like `eval`, `globals` and `locals` are evaluated when animation is created.  
 
 ### exec
 
@@ -191,13 +190,11 @@ some_animation:
         - exec: ""
 ```
 
-Unlike `eval`, `exec` is a part of animation. And by using a identifier 'widget', you can access to the widget, which associated to the animation.  
-Like `eval` you can use 'locals' and 'globals' attributes.  
+Unlike `eval`, `exec` is excuted when animation is played. And by using a identifier `widget`, you can access to the widget, that associated to the animation. Like `eval` you can use `locals` and `globals`.  
 
 ### exec_on_create
 
-`exec_on_create` is the same as `exec` except it's excuted when animation is created. So obviously `exec_on_create` is not a part of animation.  
-This is useful when you wanna share values inside a animation.  
+`exec_on_create` is the same as `exec` except it's excuted when animation is created. This is useful when you wanna share values inside a animation.  
 
 ```yaml
 __init__:
@@ -218,7 +215,7 @@ some_animation:
 
 ### \_\_init\_\_
 
-Animation named '\_\_init\_\_' is special. It's automatically created when YAML data is loaded.
+Animation named `\_\_init\_\_` is special. It's automatically created when YAML data is loaded.
 
 
 ## Live Preview
@@ -239,7 +236,7 @@ python3 ./livepreview.py filename.yaml
 
 ## Notes
 
-### Everytime you call \_\_getitem\_\_(), it create a new instance
+### Everytime you call `\_\_getitem\_\_()`, it returns a new instance
 
 so  `anims['key'] is anims['key']` is always False.  
 
