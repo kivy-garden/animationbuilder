@@ -27,7 +27,6 @@ from kivy.factory import Factory
 from kivy.app import App
 from kivy.clock import Clock, mainthread
 from kivy.uix.label import Label
-from kivy.animation import Animation
 from kivy.graphics.transformation import Matrix
 
 from watchdog.observers import Observer
@@ -35,6 +34,7 @@ from watchdog.events import FileSystemEventHandler
 from os.path import dirname, basename, join, exists
 
 from animationbuilder import AnimationBuilder
+from animationbuilder.animation_classes import Animation
 
 
 if len(argv) != 2:

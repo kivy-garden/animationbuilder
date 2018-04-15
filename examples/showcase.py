@@ -2,13 +2,13 @@
 
 from kivy.lang import Builder
 from kivy.factory import Factory
-from kivy.animation import Animation
 from kivy.properties import StringProperty, BooleanProperty
 from kivy.app import runTouchApp
 from kivy.graphics.transformation import Matrix
 
 import beforetest
 from animationbuilder import AnimationBuilder
+from animationbuilder.animation_classes import Animation
 
 
 animations = AnimationBuilder.load_string(r'''

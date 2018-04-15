@@ -3,7 +3,7 @@
 __all__ = ('Compiler', )
 
 
-from ._replacement_of_the_animation_class import Animation
+from .animation_classes import Animation
 from .fakeanimation import Exec as ExecAnimation
 from .fakeanimation import Setter as SetterAnimation
 

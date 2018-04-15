@@ -3,10 +3,10 @@
 
 from kivy.lang import Builder
 from kivy.base import runTouchApp
-from kivy.animation import Animation
 
 import beforetest
 from animationbuilder import AnimationBuilder
+from animationbuilder.animation_classes import Animation
 
 
 ANIMATION_SOURCE = r'''

@@ -4,8 +4,7 @@ __all__ = ('Callable', )
 
 from kivy.event import EventDispatcher
 from kivy.properties import ObjectProperty
-from kivy.animation import AnimationTransition
-from .._replacement_of_the_animation_class import Parallel, Sequence
+from ..animation_classes import Parallel, Sequence, AnimationTransition
 
 
 class Callable(EventDispatcher):

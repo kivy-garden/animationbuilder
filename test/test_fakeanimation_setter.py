@@ -2,10 +2,10 @@
 
 from kivy.lang import Builder
 from kivy.base import runTouchApp
-from kivy.animation import Animation
 
 import beforetest
 from animationbuilder.fakeanimation import Setter
+from animationbuilder.animation_classes import Animation
 
 
 anim = (

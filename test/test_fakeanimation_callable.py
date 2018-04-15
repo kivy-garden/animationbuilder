@@ -3,10 +3,10 @@ from __future__ import print_function
 
 from kivy.lang import Builder
 from kivy.base import runTouchApp
-from kivy.animation import Animation
 
 import beforetest
 from animationbuilder.fakeanimation import Callable
+from animationbuilder.animation_classes import Animation
 
 
 anim1 = (
