@@ -4,7 +4,6 @@ __all__ = ('Callable', )
 
 from kivy.event import EventDispatcher
 from kivy.properties import ObjectProperty
-from kivy.clock import Clock
 from kivy.animation import AnimationTransition
 from .._replacement_of_the_animation_class import Parallel, Sequence
 
@@ -31,17 +30,13 @@ class Callable(EventDispatcher):
     def start(self, widget):
         self.dispatch('on_start', widget)
         self.callable(widget)
-        self._clock_event = Clock.schedule_once(
-            lambda dt: self.dispatch('on_complete', widget), -1)
+        self.dispatch('on_complete', widget)
 
     def stop(self, widget):
         pass
 
     def cancel(self, widget):
-        clock_event = getattr(self, '_clock_event', None)
-        if clock_event is not None:
-            clock_event.cancel()
-            self._clock_event = None
+        pass
 
     def stop_property(self, widget, prop):
         pass
