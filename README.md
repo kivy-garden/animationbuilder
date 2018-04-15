@@ -236,7 +236,7 @@ python3 ./livepreview.py filename.yaml
 
 ## Notes
 
-### Everytime you call `\_\_getitem\_\_()`, it returns a new instance
+### Everytime you call `__getitem__()`, it returns a new instance
 
 so  `anims['key'] is anims['key']` is always False.  
 
