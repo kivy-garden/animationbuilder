@@ -13,13 +13,13 @@ move_to_right:
 move_to_top:
     top: 600
 
-test_sequential:
-    sequential:
+test_sequence:
+    sequence:
         - move_to_right
         - duration: 1
         - top: 600
 
-test_sequential_short_form:
+test_sequence_short_form:
     S:
         - move_to_right
         - duration: 1
@@ -51,7 +51,7 @@ FloatLayout:
         text: 'Start'
 ''')
 button = root.ids.button
-# button.bind(on_press=lambda button: anims['test_sequential_short_form'].start(button))
+# button.bind(on_press=lambda button: anims['test_sequence_short_form'].start(button))
 button.bind(on_press=lambda button: anims['test_parallel_short_form'].start(button))
 
 runTouchApp(root)

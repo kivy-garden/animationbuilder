@@ -39,8 +39,8 @@ The former looks even worse than the latter. But when you write more complex ani
 ### Sequential Animation
 
 ```yaml
-test_sequential:
-  sequential:  # You can use 'S' instead of 'sequential'
+test_sequence:
+  sequence:  # You can use 'S' instead of 'sequence'
     - right: 800
       d: 2
     - top: 600
@@ -53,7 +53,7 @@ You can use other animations inside.
 move_to_right:
   right: 800
   d: 2
-test_sequential:
+test_sequence:
   S:
     - move_to_right
     - top: 600

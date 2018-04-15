@@ -40,8 +40,8 @@ class Compiler:
         del copied['special_keyword']
         return Animation(**copied)
 
-    def compile_sequential(self, dictionary):
-        anims = (func_compile(data) for (data, func_compile, ) in dictionary['sequential'])
+    def compile_sequence(self, dictionary):
+        anims = (func_compile(data) for (data, func_compile, ) in dictionary['sequence'])
         anims = (anim for anim in anims if anim is not None)
         r = sum(anims, next(anims))
 
@@ -51,7 +51,7 @@ class Compiler:
             for key, (data, func_compile, ) in dictionary['special_keyword'].items()
         })
         del copied['special_keyword']
-        del copied['sequential']
+        del copied['sequence']
 
         for key, value in copied.items():
             setattr(r, key, value)
@@ -113,7 +113,7 @@ class Compiler:
         # replace short-form with long-form
         temp = dictionary.pop('S', None)
         if temp is not None:
-            dictionary['sequential'] = temp
+            dictionary['sequence'] = temp
         temp = dictionary.pop('P', None)
         if temp is not None:
             dictionary['parallel'] = temp
@@ -127,11 +127,11 @@ class Compiler:
                         special_keyword[key] = func_prepare(value[len(prefix):])
         dictionary['special_keyword'] = special_keyword
 
-        # sequential
-        sequential = dictionary.get('sequential')
-        if sequential is not None:
-            dictionary['sequential'] = self.prepare_list(sequential)
-            return (dictionary, self.compile_sequential, )
+        # sequence
+        sequence = dictionary.get('sequence')
+        if sequence is not None:
+            dictionary['sequence'] = self.prepare_list(sequence)
+            return (dictionary, self.compile_sequence, )
 
         # parallel
         parallel = dictionary.get('parallel')

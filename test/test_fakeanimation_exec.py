@@ -20,7 +20,7 @@ FloatLayout:
         id: button
         size_hint: None, None
         size: 100, 100
-        text: 'sequential'
+        text: 'sequence'
 ''')
 root.ids.button.bind(on_press=anim.start)
 
