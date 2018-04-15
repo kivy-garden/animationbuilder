@@ -5,6 +5,7 @@ __all__ = ('Compiler', )
 
 from ._replacement_of_the_animation_class import Animation
 from .fakeanimation import Exec as ExecAnimation
+from .fakeanimation import Setter as SetterAnimation
 
 
 class Compiler:
@@ -39,6 +40,15 @@ class Compiler:
         })
         del copied['special_keyword']
         return Animation(**copied)
+
+    def compile_setter(self, dictionary):
+        copied = dictionary.copy()
+        copied.update({
+            key: func_compile(data)
+            for key, (data, func_compile, ) in dictionary['special_keyword'].items()
+        })
+        del copied['special_keyword']
+        return SetterAnimation(**copied)
 
     def compile_sequence(self, dictionary):
         anims = (func_compile(data) for (data, func_compile, ) in dictionary['sequence'])
@@ -138,6 +148,12 @@ class Compiler:
         if parallel is not None:
             dictionary['parallel'] = self.prepare_list(parallel)
             return (dictionary, self.compile_parallel, )
+
+        # setter
+        # if 'duration' == 0 create 'fakeanimation.Setter' instead of 'Animation'
+        duration = dictionary.get('d', dictionary.get('duration'))
+        if duration == 0:
+            return (dictionary, self.compile_setter)
 
         # simple
         return (dictionary, self.compile_simple)

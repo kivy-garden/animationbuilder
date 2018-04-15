@@ -30,6 +30,8 @@ anim.start(some_widget)
 try:
     from ._callable import Callable
     from ._exec import Exec
+    from ._setter import Setter
 except ImportError:
     from _callable import Callable
     from _exec import Exec
+    from _setter import Setter
