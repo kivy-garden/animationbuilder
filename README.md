@@ -182,15 +182,15 @@ You can use python statements.
 some_animation:
     S:
         - exec: |  # This is one of methods to write multiline string in YAML.
-            widget.pos = (500, 500, )
-            widget.opacity = 1
+            target.pos = (500, 500, )
+            target.opacity = 1
         - pos: [0, 0, ]
           opacity: 0.2
-        - "exec: widget.opacity = 1"
+        - "exec: target.opacity = 1"
         - exec: ""
 ```
 
-Unlike `eval`, `exec` is excuted when animation is played. And by using a identifier `widget`, you can access to the widget, that associated to the animation. Like `eval` you can use `locals` and `globals`.  
+Unlike `eval`, `exec` is excuted when animation is played. And by using a identifier `target`, you can access to the widget that associated to the animation. Like `eval` you can use `locals` and `globals`.  
 
 ### exec_on_create
 

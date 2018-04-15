@@ -17,10 +17,10 @@ class Exec(Callable):
         kwargs['callable'] = self.callback
         super(Exec, self).__init__(**kwargs)
 
-    def callback(self, widget):
+    def callback(self, target):
         globals = self.globals
         locals = self.locals
-        target = locals if globals is None else globals
-        if target is not None:
-            target['widget'] = widget
+        dictionary = locals if globals is None else globals
+        if dictionary is not None:
+            dictionary['target'] = target
         exec(self.codeobject, globals, locals)

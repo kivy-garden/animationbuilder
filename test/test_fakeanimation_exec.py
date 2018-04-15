@@ -9,7 +9,7 @@ from animationbuilder.fakeanimation import Exec
 
 
 anim = (
-    Exec(codeobject="widget.pos = [700, 500]") +
+    Exec(codeobject="target.pos = [700, 500]") +
     Animation(pos=(0, 0))
 )
 

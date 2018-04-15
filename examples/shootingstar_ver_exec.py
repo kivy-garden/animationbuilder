@@ -71,7 +71,7 @@ star_init:
                 'right': parent.width - random() * 100,
                 'opacity': 0,
             }.items():
-                setattr(widget, property_name, value)
+                setattr(target, property_name, value)
 
 star_main:
     S:

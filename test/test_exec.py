@@ -14,9 +14,7 @@ test_exec:
         - exec_on_create: |
             from random import random
             destination = (random() * 700, random() * 500, )
-        # `widget` is a special identifier that indicates the widget, which
-        # associated to the animation. Only available in `exec`.
-        - "exec: widget.pos = (random() * 700, random() * 500, )"
+        - "exec: target.pos = (random() * 700, random() * 500, )"
         - pos: "eval: destination"
 ''')
 anim = anims['test_exec']

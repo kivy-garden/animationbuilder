@@ -63,12 +63,12 @@ _ellipse:
 
 ellipse:
     S:
-        - "exec: widget.center_y = parent.height / 2"
+        - "exec: target.center_y = parent.height / 2"
         - _ellipse
 
 ellipse_repeat:
     S:
-        - "exec: widget.center_y = parent.height / 2"
+        - "exec: target.center_y = parent.height / 2"
         - S:
             - _ellipse
           repeat: True
