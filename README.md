@@ -215,7 +215,7 @@ some_animation:
 
 ### \_\_init\_\_
 
-Animation named `\_\_init\_\_` is special. It's automatically created when YAML data is loaded.
+Animation named `__init__` is special. It's automatically created when YAML data is loaded.
 
 
 ## Live Preview
