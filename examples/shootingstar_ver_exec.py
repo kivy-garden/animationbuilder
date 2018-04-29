@@ -21,7 +21,6 @@ class CustomizedMesh(Factory.Mesh):
 Factory.register('CustomizedMesh', cls=CustomizedMesh)
 
 ANIMATION_CODE = r'''
-# __init__ is special, will be automatically instanciated when ANIMATION_CODE is loaded.
 __init__:
     exec_on_create: |
         from random import random
@@ -98,6 +97,10 @@ Builder.load_string(r'''
             pos: 0, 0,
             size: self.size
         StencilUnUse:
+        CustomizedMesh:
+            vertices: self.mesh_vertices
+            indices: self.MESH_INDICES
+            mode: 'triangles'
         StencilPop:
 ''')
 
