@@ -56,7 +56,7 @@ Builder.load_string(r'''
     Image:
         size: root.size
         allow_stretch: True
-        source: 'kivy-logo-black-128.png'
+        source: 'data/logo/kivy-icon-128.png'
 ''')
 
 

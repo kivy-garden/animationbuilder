@@ -109,7 +109,7 @@ Builder.load_string(r'''
         id: target
         size_hint: None, None
         Image:
-            source: 'kivy-logo-black-128.png'
+            source: 'data/logo/kivy-icon-128.png'
             size: target.size
     BoxLayout:
         id: menu

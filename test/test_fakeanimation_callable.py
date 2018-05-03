@@ -39,7 +39,7 @@ root = Builder.load_string(r'''
 FloatLayout:
     Image:
         id: image1
-        source: 'kivy-logo-black-128.png'
+        source: 'data/logo/kivy-icon-128.png'
         size_hint: None, None
         size: self.texture_size
     Button:
@@ -49,7 +49,7 @@ FloatLayout:
         text: 'start'
     Image:
         id: image2
-        source: 'kivy-logo-black-128.png'
+        source: 'data/logo/kivy-icon-128.png'
         size_hint: None, None
         size: self.texture_size
         right: 800
