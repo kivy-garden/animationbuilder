@@ -38,7 +38,7 @@ from animationbuilder.animation_classes import Animation
 
 
 if len(argv) != 2:
-    print('usage: %s filename.anim' % argv[0])
+    print('usage: %s filename.yaml' % argv[0])
     exit(1)
 
 
