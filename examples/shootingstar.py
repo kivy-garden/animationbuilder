@@ -42,28 +42,28 @@ Factory.register('CustomizedMesh', cls=CustomizedMesh)
 
 ANIMATION_CODE = r'''
 change_color_randomly:
-    color: "eval: get_random_color()"
-    d: "eval: random() + 1"
+    color: "e: get_random_color()"
+    d: "e: random() + 1"
 
 random_sleep:
     d: 0.01
-    s: "eval: random()"
+    s: "e: random()"
 
 star_bounce:
     P:
-        - center_x: "eval: random() * parent.width"
-          d: "eval: bounce_duration"
+        - center_x: "e: random() * parent.width"
+          d: "e: bounce_duration"
         - y: 0
-          d: "eval: bounce_duration"
+          d: "e: bounce_duration"
           t: out_bounce
 
 star_opacity:
     S:
         - opacity: 1
-          d: "eval: bounce_duration"
+          d: "e: bounce_duration"
         - random_sleep
         - opacity: 0
-          d: "eval: random() + 1"
+          d: "e: random() + 1"
 
 star_color:
     S:
