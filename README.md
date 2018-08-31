@@ -136,8 +136,8 @@ from kivy.garden.animationbuilder import AnimationBuilder
 
 anims = AnimationBuilder.load_string(r'''
 change_color:
-    color: "eval: get_random_color()"
-    d: "eval: random() + additional_time"
+    color: "e: get_random_color()"
+    d: "e: random() + additional_time"
 ''')
 anims.globals = {
     'get_random_color': get_random_color,
@@ -152,78 +152,12 @@ anim.start(some_widget)
 
 `eval` is excuted when animation is created. `locals` and `globals` attributes are directly passed to built-in function `eval()`.  
 
-### locals & globals
-
-You can access to the `globals` and `locals` directly.  
-
-```python
-from kivy.utils import get_random_color
-
-from kivy.garden.animationbuilder import AnimationBuilder
-
-
-anims = AnimationBuilder.load_string(r'''
-change_color:
-    color: "globals: external_value"
-''')
-anims.globals = {'external_value': get_random_color(), }
-
-anim = anims['change_color']  # This is where `globals` and `locals` are evaluated.
-anim.start(some_widget)
-```
-
-Like `eval`, `globals` and `locals` are evaluated when animation is created.  
-
-### exec
-
-You can use python statements.  
-
-```yaml
-some_animation:
-    S:
-        - exec: |  # This is one of methods to write multiline string in YAML.
-            target.pos = (500, 500, )
-            target.opacity = 1
-        - pos: [0, 0, ]
-          opacity: 0.2
-        - "exec: target.opacity = 1"
-        - exec: ""
-```
-
-Unlike `eval`, `exec` is excuted when animation is played. And by using a identifier `target`, you can access to the widget that associated to the animation. Like `eval` you can use `locals` and `globals`.  
-
-### exec_on_create
-
-`exec_on_create` is the same as `exec` except it's excuted when animation is created. This is useful when you wanna share values inside a animation.  
-
-```yaml
-__init__:
-    exec_on_create: |
-        from random import random
-
-some_animation:
-    S:
-        - exec_on_create: "shared_value = random() + 1"
-        - P:
-            - pos: [500, 500]
-              d: "eval: shared_value"
-            - opacity: 0
-              d: "eval: shared_value"
-              t: out_sine
-```
-
-
-### \_\_init\_\_
-
-Animation named `__init__` is special. It's automatically created when YAML data is loaded.
-
-
 ## Live Preview
 
 Just like [kviewer](https://github.com/kivy/kivy/blob/master/kivy/tools/kviewer.py), livepreview.py allowing you to dynamically display the animation.
 
 ```text
-python3 ./livepreview.py filename.yaml
+python ./livepreview.py ./filename.yaml
 ```
 
 ![screenshot](livepreview.png)  
@@ -245,33 +179,8 @@ so  `anims['key'] is anims['key']` is always False.
 There are so many words that are translated as boolean value.  
 For instance: Yes, No, y, n, ON, OFF  [more info](http://yaml.org/type/bool.html)
 
-### Be careful of using `locals`
-
-The code below works fine, when `locals = None`(default) and `globals = {}`(default).  
-
-```yaml
-__init__:
-  exec_on_create: |
-    from random import random
-    def random_pos():
-      return (random() * 300, random() * 300, )
-
-main:
-  pos: "eval: random_pos()"
-```
-
-But it doesn't work when `locals = {}` and `globals = None`. Same for when `locals = {}` and `globals = {}`.  
-
-```text
-NameError: name 'random' is not defined
-```
-
-It seems `eval()` doesn't look `locals` up when resolving `random` during excution of `random_pos()`. So unless you know how `locals` and `globals` works in `eval()` and `exec()`, should not use `locals`.  
-
 ## Others
 
-[Youtube](https://www.youtube.com/playlist?list=PLNdhqAjzeEGiF1oLISnCCPoPj1FhZbOAP)  
-
 **Tested Environment**  
-Python 3.5.0 + Kivy 1.10.0  
-Python 2.7.2 + Kivy 1.10.0  
+Python 3.5.0 + Kivy 1.10.1  
+~~Python 2.7.2 + Kivy 1.10.0~~  
