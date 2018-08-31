@@ -2,15 +2,12 @@
 
 __all__ = ('Compiler', )
 
-
 from .animation_classes import Animation
-from .fakeanimation import Exec as ExecAnimation
-from .fakeanimation import Setter as SetterAnimation
 
 
 class Compiler:
 
-    SPECIAL_KEYWORDS = 'eval locals globals exec'.split()
+    SPECIAL_KEYWORDS = 'eval locals globals'.split()
 
     def __init__(self, database, **kwargs):
         self.special_keyword_preparers = {
@@ -40,15 +37,6 @@ class Compiler:
         })
         del copied['special_keyword']
         return Animation(**copied)
-
-    def compile_setter(self, dictionary):
-        copied = dictionary.copy()
-        copied.update({
-            key: func_compile(data)
-            for key, (data, func_compile, ) in dictionary['special_keyword'].items()
-        })
-        del copied['special_keyword']
-        return SetterAnimation(**copied)
 
     def compile_sequence(self, dictionary):
         anims = (func_compile(data) for (data, func_compile, ) in dictionary['sequence'])
@@ -88,15 +76,6 @@ class Compiler:
     def resolve_globals(self, key):
         return self.globals[key]
 
-    def compile_exec(self, codeobject):
-        return ExecAnimation(
-            codeobject=codeobject,
-            globals=self.globals,
-            locals=self.locals)
-
-    def do_exec(self, codeobject):
-        exec(codeobject, self.globals, self.locals)
-
     def prepare_eval(self, string):
         return (compile(string, '<string>', 'eval'), self.do_eval)
 
@@ -106,20 +85,7 @@ class Compiler:
     def prepare_globals(self, string):
         return (string, self.resolve_globals)
 
-    def prepare_exec(self, string):
-        return (compile(string, '<string>', 'exec'), self.compile_exec)
-
     def prepare_dictionary(self, dictionary):
-        # 'string' will be excuted when create a animation
-        string = dictionary.pop('exec_on_create', None)
-        if string is not None:
-            return (compile(string, '<string>', 'exec'), self.do_exec)
-
-        # 'string' will be excuted as a part of animation
-        string = dictionary.pop('exec', None)
-        if string is not None:
-            return self.prepare_exec(string)
-
         # replace short-form with long-form
         temp = dictionary.pop('S', None)
         if temp is not None:
@@ -148,12 +114,6 @@ class Compiler:
         if parallel is not None:
             dictionary['parallel'] = self.prepare_list(parallel)
             return (dictionary, self.compile_parallel, )
-
-        # setter
-        # if 'duration' == 0 create 'fakeanimation.Setter' instead of 'Animation'
-        duration = dictionary.get('d', dictionary.get('duration'))
-        if duration == 0:
-            return (dictionary, self.compile_setter)
 
         # simple
         return (dictionary, self.compile_simple)

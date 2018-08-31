@@ -23,7 +23,6 @@ class AnimationData(Mapping):
         self._compiler = Compiler(database, **kwargs)
         self._compile = self._compiler.compile
         self._database = database
-        self.get('__init__')
 
     def __getitem__(self, key):
         return self._compile(key)
