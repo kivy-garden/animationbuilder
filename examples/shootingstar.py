@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import itertools
+from functools import wraps as functools_wraps
+from random import random
 
+from kivy.utils import get_random_color
 from kivy.lang import Builder
 from kivy.clock import Clock
 from kivy.factory import Factory
@@ -10,6 +13,23 @@ from kivy.app import App
 
 import beforetest
 from animationbuilder import AnimationBuilder
+
+schedule_once = Clock.schedule_once
+
+
+def yieldsleep(create_gen):
+    @functools_wraps(create_gen)
+    def func(*args, **kwargs):
+        gen = create_gen(*args, **kwargs)
+
+        def resume_gen(dt):
+            try:
+                schedule_once(resume_gen, next(gen))
+            except StopIteration:
+                pass
+
+        resume_gen(0)
+    return func
 
 
 class CustomizedMesh(Factory.Mesh):
@@ -21,11 +41,6 @@ class CustomizedMesh(Factory.Mesh):
 Factory.register('CustomizedMesh', cls=CustomizedMesh)
 
 ANIMATION_CODE = r'''
-__init__:
-    exec_on_create: |
-        from random import random
-        from kivy.utils import get_random_color
-
 change_color_randomly:
     color: "eval: get_random_color()"
     d: "eval: random() + 1"
@@ -56,30 +71,11 @@ star_color:
         - change_color_randomly
         - change_color_randomly
 
-star_init:
-    S:
-        - exec_on_create: |
-            bounce_duration = random() * 4 + 2
-        - exec: |
-            length = random() * 200 + 20
-            for property_name, value in {
-                'color': get_random_color(),
-                'size': (length, length, ),
-                'size_hint': (None, None, ),
-                'top': parent.height,
-                'right': parent.width - random() * 100,
-                'opacity': 0,
-            }.items():
-                setattr(target, property_name, value)
-
 star_main:
-    S:
-        - star_init
-        - random_sleep
-        - P:
-            - star_bounce
-            - star_opacity
-            - star_color
+    P:
+        - star_bounce
+        - star_opacity
+        - star_color
 '''
 
 Builder.load_string(r'''
@@ -136,21 +132,42 @@ class Star(Factory.RelativeLayout):
 class ShootingStarApp(App):
 
     def build(self):
-        self.root = root = Factory.FloatLayout()
-        self.anims = AnimationBuilder.load_string(
-            ANIMATION_CODE, globals={'parent': root, })
-        return root
+        return Factory.FloatLayout()
 
     def on_start(self):
-        Clock.schedule_interval(self.spawn_star, 0.5)
+        self.start_animation()
 
-    def spawn_star(self, dt):
-        star = Star()
+    @yieldsleep
+    def start_animation(self):
         root = self.root
-        anim = self.anims['star_main']
-        root.add_widget(star)
-        anim.bind(on_complete=lambda *args: root.remove_widget(star))
-        anim.start(star)
+        anims = AnimationBuilder.load_string(
+            ANIMATION_CODE,
+            globals={
+                'parent': root,
+                'get_random_color': get_random_color,
+                'random': random,
+            })
+
+        def spawn_star():
+            anims.globals['bounce_duration'] = random() * 4 + 2
+            length = random() * 200 + 20
+
+            star = Star(
+                color=get_random_color(),
+                size=(length, length, ),
+                size_hint=(None, None, ),
+                top=root.top,
+                right=root.width - random() * 100,
+                opacity=0,
+            )
+            root.add_widget(star)
+            anim = anims['star_main']
+            anim.bind(on_complete=lambda *args: root.remove_widget(star))
+            anim.start(star)
+
+        while True:
+            spawn_star()
+            yield .5 + random()
 
 
 if __name__ == '__main__':
