@@ -105,6 +105,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
             yield .5
             self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
             self.assertAlmostEqual(target.y, 400, delta=self.DELTA)
+            yield .5
             stopTouchApp()
 
         _func()
@@ -142,6 +143,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
             yield .5
             self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
             self.assertAlmostEqual(target.y, 400, delta=self.DELTA)
+            yield .5
             stopTouchApp()
 
         _func()
@@ -171,6 +173,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
             yield .5
             self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
             self.assertAlmostEqual(target.y, 400, delta=self.DELTA)
+            yield .5
             stopTouchApp()
 
         _func()
@@ -202,6 +205,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
             yield .5
             self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
             self.assertAlmostEqual(target.y, 400, delta=self.DELTA)
+            yield .5
             stopTouchApp()
 
         _func()
@@ -232,6 +236,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
             anim.start(target)
             yield 1
             self.assertAlmostEqual(target.x, 0, delta=self.DELTA)
+            yield .5
             stopTouchApp()
 
         _func()
