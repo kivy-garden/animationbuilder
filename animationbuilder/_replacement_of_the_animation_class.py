@@ -32,8 +32,7 @@ class Sequence(Animation):
         self.anim1 = anim1
         self.anim2 = anim2
 
-        self.anim1.bind(on_start=self.on_anim1_start,
-                        on_complete=self.on_anim1_complete,
+        self.anim1.bind(on_complete=self.on_anim1_complete,
                         on_progress=self.on_anim1_progress)
         self.anim2.bind(on_complete=self.on_anim2_complete,
                         on_progress=self.on_anim2_progress)
@@ -46,6 +45,7 @@ class Sequence(Animation):
         self.stop(widget)
         self._widgets[widget.uid] = True
         self._register()
+        self.dispatch('on_start', widget)
         self.anim1.start(widget)
 
     def stop(self, widget):
@@ -84,9 +84,6 @@ class Sequence(Animation):
         if (not self.anim1.have_properties_to_animate(widget) and
                 not self.anim2.have_properties_to_animate(widget)):
             self.cancel(widget)
-
-    def on_anim1_start(self, instance, widget):
-        self.dispatch('on_start', widget)
 
     def on_anim1_complete(self, instance, widget):
         if widget.uid not in self._widgets:
