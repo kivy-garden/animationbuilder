@@ -56,6 +56,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
     def test_simple_anim(self):
         root = self.root
         target = self.target
+        DELTA = self.DELTA
 
         @yieldsleep
         def _func():
@@ -69,9 +70,9 @@ class AnimationBuilderTestCase(unittest.TestCase):
             yield 0
             anim.start(target)
             yield .5
-            self.assertAlmostEqual(target.x, 300, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 300, delta=DELTA)
             yield .5
-            self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 600, delta=DELTA)
             stopTouchApp()
 
         _func()
@@ -80,6 +81,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
     def test_sequential_anim(self):
         root = self.root
         target = self.target
+        DELTA = self.DELTA
 
         @yieldsleep
         def _func():
@@ -96,17 +98,17 @@ class AnimationBuilderTestCase(unittest.TestCase):
             yield 0
             anim.start(target)
             yield .5
-            self.assertAlmostEqual(target.x, 300, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 300, delta=DELTA)
             self.assertEqual(target.y, 0)
             yield .5
-            self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
-            self.assertAlmostEqual(target.y, 0, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 600, delta=DELTA)
+            self.assertAlmostEqual(target.y, 0, delta=DELTA)
             yield .5
-            self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
-            self.assertAlmostEqual(target.y, 200, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 600, delta=DELTA)
+            self.assertAlmostEqual(target.y, 200, delta=DELTA)
             yield .5
-            self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
-            self.assertAlmostEqual(target.y, 400, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 600, delta=DELTA)
+            self.assertAlmostEqual(target.y, 400, delta=DELTA)
             yield .5
             stopTouchApp()
 
@@ -116,6 +118,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
     def test_sequential_anim2(self):
         root = self.root
         target = self.target
+        DELTA = self.DELTA
 
         @yieldsleep
         def _func():
@@ -134,17 +137,17 @@ class AnimationBuilderTestCase(unittest.TestCase):
             yield 0
             anim.start(target)
             yield .5
-            self.assertAlmostEqual(target.x, 300, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 300, delta=DELTA)
             self.assertEqual(target.y, 0)
             yield .5
-            self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
-            self.assertAlmostEqual(target.y, 0, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 600, delta=DELTA)
+            self.assertAlmostEqual(target.y, 0, delta=DELTA)
             yield .5
-            self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
-            self.assertAlmostEqual(target.y, 200, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 600, delta=DELTA)
+            self.assertAlmostEqual(target.y, 200, delta=DELTA)
             yield .5
-            self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
-            self.assertAlmostEqual(target.y, 400, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 600, delta=DELTA)
+            self.assertAlmostEqual(target.y, 400, delta=DELTA)
             yield .5
             stopTouchApp()
 
@@ -154,6 +157,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
     def test_parallel_anim(self):
         root = self.root
         target = self.target
+        DELTA = self.DELTA
 
         @yieldsleep
         def _func():
@@ -170,11 +174,11 @@ class AnimationBuilderTestCase(unittest.TestCase):
             yield 0
             anim.start(target)
             yield .5
-            self.assertAlmostEqual(target.x, 300, delta=self.DELTA)
-            self.assertAlmostEqual(target.y, 333, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 300, delta=DELTA)
+            self.assertAlmostEqual(target.y, 333, delta=DELTA)
             yield .5
-            self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
-            self.assertAlmostEqual(target.y, 400, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 600, delta=DELTA)
+            self.assertAlmostEqual(target.y, 400, delta=DELTA)
             yield .5
             stopTouchApp()
 
@@ -184,6 +188,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
     def test_parallel_anim2(self):
         root = self.root
         target = self.target
+        DELTA = self.DELTA
 
         @yieldsleep
         def _func():
@@ -202,11 +207,11 @@ class AnimationBuilderTestCase(unittest.TestCase):
             yield 0
             anim.start(target)
             yield .5
-            self.assertAlmostEqual(target.x, 300, delta=self.DELTA)
-            self.assertAlmostEqual(target.y, 333, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 300, delta=DELTA)
+            self.assertAlmostEqual(target.y, 333, delta=DELTA)
             yield .5
-            self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
-            self.assertAlmostEqual(target.y, 400, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 600, delta=DELTA)
+            self.assertAlmostEqual(target.y, 400, delta=DELTA)
             yield .5
             stopTouchApp()
 
@@ -216,6 +221,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
     def test_eval(self):
         root = self.root
         target = self.target
+        DELTA = self.DELTA
 
         @yieldsleep
         def _func():
@@ -230,14 +236,14 @@ class AnimationBuilderTestCase(unittest.TestCase):
             yield 0
             anim.start(target)
             yield 1
-            self.assertAlmostEqual(target.x, 600, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 600, delta=DELTA)
             yield .1
             anims.locals['external_value'] = 0
             anim = anims['main']
             yield 0
             anim.start(target)
             yield 1
-            self.assertAlmostEqual(target.x, 0, delta=self.DELTA)
+            self.assertAlmostEqual(target.x, 0, delta=DELTA)
             yield .5
             stopTouchApp()
 
