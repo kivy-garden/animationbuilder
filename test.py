@@ -2,6 +2,8 @@
 
 import unittest
 from textwrap import dedent
+from kivy.config import Config
+Config.set('graphics', 'maxfps', 0)
 from kivy.lang import Builder
 from kivy.base import runTouchApp, stopTouchApp
 
@@ -33,7 +35,7 @@ def yieldsleep(create_gen):
 
 class AnimationBuilderTestCase(unittest.TestCase):
 
-    DELTA = 50
+    DELTA = 10
 
     def setUp(self):
         self.root = root = Builder.load_string(dedent('''
