@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import itertools
 from functools import wraps as functools_wraps
 from random import random
 
@@ -81,52 +80,51 @@ star_main:
 Builder.load_string(r'''
 <Star>:
     canvas:
+        # Line:
+        #     rectangle: [*self.pos, *self.size, ]
+        PushMatrix:
+        Translate:
+            xy: self.center
+        Scale:
+            x: self.width
+            y: self.height
         StencilPush:
         CustomizedMesh:
-            vertices: self.mesh_vertices
+            vertices: self.MESH_VERTICES
             indices: self.MESH_INDICES
             mode: 'triangles'
         StencilUse:
         Color:
             rgba: self.color
         Rectangle:
-            pos: 0, 0,
-            size: self.size
+            pos: -1, -1
+            size: 2, 2
         StencilUnUse:
         CustomizedMesh:
-            vertices: self.mesh_vertices
+            vertices: self.MESH_VERTICES
             indices: self.MESH_INDICES
             mode: 'triangles'
         StencilPop:
+        PopMatrix:
 ''')
 
 
-class Star(Factory.RelativeLayout):
+class Star(Factory.Widget):
     color = ListProperty()
-    mesh_vertices = ListProperty()
     MESH_INDICES = [
         0, 3, 5,
         1, 4, 6,
         1, 2, 3,
     ]
-    MESH_VERTICES = [value / 2 + 0.5 for value in (
-        .0000, 1.0000,
-        .2245, .3090,
-        .9511, .3090,
-        .3633, -.1180,
-        .5878, -.8090,
-        # .0000, -.3820,
-        -.5878, -.8090,
-        # -.3633, -.1180,
-        -.9511, .3090,
-        # -.2245, .3090,
-    )]
-
-    def on_size(self, __, size):
-        self.mesh_vertices = (
-            length * factor
-            for length, factor
-            in zip(itertools.cycle(size), self.MESH_VERTICES))
+    MESH_VERTICES = (
+        0.0, 0.40449999999999997,
+        0.11225, 0.059,
+        0.47555, 0.059,
+        0.18165, -0.1545,
+        0.2939, -0.5,
+        -0.2939, -0.5,
+        -0.47555, 0.059,
+    )
 
 
 class ShootingStarApp(App):
