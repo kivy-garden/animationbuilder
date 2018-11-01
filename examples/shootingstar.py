@@ -31,14 +31,6 @@ def yieldsleep(create_gen):
     return func
 
 
-class CustomizedMesh(Factory.Mesh):
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault('fmt', [(b'vPosition', 2, 'float'), ])
-        super(CustomizedMesh, self).__init__(*args, **kwargs)
-
-
-Factory.register('CustomizedMesh', cls=CustomizedMesh)
-
 ANIMATION_CODE = r'''
 change_color_randomly:
     color: "e: get_random_color()"
@@ -89,7 +81,7 @@ Builder.load_string(r'''
             x: self.width
             y: self.height
         StencilPush:
-        CustomizedMesh:
+        Mesh:
             vertices: self.MESH_VERTICES
             indices: self.MESH_INDICES
             mode: 'triangles'
@@ -100,7 +92,7 @@ Builder.load_string(r'''
             pos: -1, -1
             size: 2, 2
         StencilUnUse:
-        CustomizedMesh:
+        Mesh:
             vertices: self.MESH_VERTICES
             indices: self.MESH_INDICES
             mode: 'triangles'
@@ -117,13 +109,13 @@ class Star(Factory.Widget):
         1, 2, 3,
     ]
     MESH_VERTICES = (
-        0.0, 0.40449999999999997,
-        0.11225, 0.059,
-        0.47555, 0.059,
-        0.18165, -0.1545,
-        0.2939, -0.5,
-        -0.2939, -0.5,
-        -0.47555, 0.059,
+        0.0, 0.40449999999999997, 0, 0,
+        0.11225, 0.059, 0, 0,
+        0.47555, 0.059, 0, 0,
+        0.18165, -0.1545, 0, 0,
+        0.2939, -0.5, 0, 0,
+        -0.2939, -0.5, 0, 0,
+        -0.47555, 0.059, 0, 0,
     )
 
 
