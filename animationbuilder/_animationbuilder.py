@@ -64,4 +64,4 @@ class AnimationBuilder:
 
     @staticmethod
     def load_stream(stream, **kwargs):
-        return AnimationData(yaml.load(stream), **kwargs)
+        return AnimationData(yaml.safe_load(stream), **kwargs)
