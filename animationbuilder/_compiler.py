@@ -4,6 +4,9 @@ __all__ = ('Compiler', )
 
 from .animation_classes import Animation
 
+EVAL_PREFIX = 'e '
+EVAL_PREFIX_LENGTH = len(EVAL_PREFIX)
+
 
 class Compiler:
 
@@ -68,11 +71,11 @@ class Compiler:
         if temp is not None:
             dictionary['parallel'] = temp
 
-        # if value is str and starts with 'e: ', compile it as python expression
+        # if value is str and starts with EVAL_PREFIX, compile it as python expression
         need_eval = {}
         for key, value in dictionary.items():
-            if isinstance(value, str) and value.startswith('e: '):
-                need_eval[key] = compile(value[3:], '<string>', 'eval')
+            if isinstance(value, str) and value.startswith(EVAL_PREFIX):
+                need_eval[key] = compile(value[EVAL_PREFIX_LENGTH:], '<string>', 'eval')
         dictionary['need_eval'] = need_eval
 
         # sequence
