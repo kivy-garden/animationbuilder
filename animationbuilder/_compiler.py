@@ -8,12 +8,15 @@ from .animation_classes import Animation
 class Compiler:
 
     def __init__(self, database, **kwargs):
+        init_code = database.pop('__init__', None)
         self.database = {
             key: self.prepare_dictionary(data)
             for key, data in database.items()
         }
         self.locals = kwargs.get('locals', None)
         self.globals = kwargs.get('globals', {})
+        if init_code is not None:
+            exec(init_code, self.globals, self.locals)
 
     @property
     def compile(self):

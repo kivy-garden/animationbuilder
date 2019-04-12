@@ -32,6 +32,10 @@ def yieldsleep(create_gen):
 
 
 ANIMATION_CODE = r'''
+__init__: |
+    from random import random
+    from kivy.utils import get_random_color
+
 change_color_randomly:
     color: "e: get_random_color()"
     d: "e: random() + 1"
@@ -132,11 +136,7 @@ class ShootingStarApp(App):
         root = self.root
         anims = AnimationBuilder.load_string(
             ANIMATION_CODE,
-            globals={
-                'parent': root,
-                'get_random_color': get_random_color,
-                'random': random,
-            })
+            globals={'parent': root, })
 
         def spawn_star():
             anims.globals['bounce_duration'] = random() * 4 + 2
