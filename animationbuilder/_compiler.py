@@ -2,6 +2,7 @@
 
 __all__ = ('Compiler', )
 
+from functools import partial
 from .animation_classes import Animation
 
 EVAL_PREFIX = 'e '
@@ -22,8 +23,7 @@ class Compiler:
             exec(init_code, self.globals, self.locals)
 
     def create_anim_from_id(self, identifier):
-        data, func_create_anim = self.database[identifier]
-        return func_create_anim(data)
+        return self.database[identifier]()
 
     def _do_eval(self, dictionary):
         dictionary.update({
@@ -38,7 +38,7 @@ class Compiler:
         return Animation(**copied)
 
     def _create_sequential_anim(self, dictionary):
-        anims = (func_compile(data) for (data, func_compile, ) in dictionary['sequence'])
+        anims = (create_anim() for create_anim in dictionary['sequence'])
         r = sum(anims, next(anims))
 
         copied = dictionary.copy()
@@ -48,7 +48,7 @@ class Compiler:
         return r
 
     def _create_parallel_anim(self, dictionary):
-        anims = (func_compile(data) for (data, func_compile, ) in dictionary['parallel'])
+        anims = (create_anim() for create_anim in dictionary['parallel'])
         r = next(anims)
         for anim in anims:
             r &= anim
@@ -78,20 +78,20 @@ class Compiler:
         sequence = dictionary.get('sequence')
         if sequence is not None:
             dictionary['sequence'] = self.prepare_list(sequence)
-            return (dictionary, self._create_sequential_anim, )
+            return partial(self._create_sequential_anim, dictionary)
 
         # parallel
         parallel = dictionary.get('parallel')
         if parallel is not None:
             dictionary['parallel'] = self.prepare_list(parallel)
-            return (dictionary, self._create_parallel_anim, )
+            return partial(self._create_parallel_anim, dictionary)
 
         # simple
-        return (dictionary, self._create_anim)
+        return partial(self._create_anim, dictionary)
 
     def prepare_list(self, listobj):
         return [
-            (item, self.create_anim_from_id) if isinstance(item, str)
+            partial(self.create_anim_from_id, item) if isinstance(item, str)
             else self._compile_dictionary(item) if isinstance(item, dict)
             else self._raise_exception_unsupported_data(item)
             for item in listobj
