@@ -22,30 +22,30 @@ class Compiler:
     def create_anim_from_id(self, identifier):
         return self.database[identifier]()
 
-    def _do_eval(self, dictionary):
-        dictionary.update({
+    def _do_eval(self, d):
+        d.update({
             key: eval(codeobject, self.globals, self.locals)
-            for key, codeobject in dictionary['need_to_eval'].items()
+            for key, codeobject in d['need_to_eval'].items()
         })
 
-    def _create_anim(self, dictionary):
-        copied = dictionary.copy()
+    def _create_anim(self, d):
+        copied = d.copy()
         self._do_eval(copied)
         del copied['need_to_eval']
         return Animation(**copied)
 
-    def _create_sequential_anim(self, dictionary):
-        anims = (create_anim() for create_anim in dictionary['sequence'])
+    def _create_sequential_anim(self, d):
+        anims = (create_anim() for create_anim in d['sequence'])
         r = sum(anims, next(anims))
 
-        copied = dictionary.copy()
+        copied = d.copy()
         self._do_eval(copied)
 
         r.repeat = copied.get('repeat', False)
         return r
 
-    def _create_parallel_anim(self, dictionary):
-        anims = (create_anim() for create_anim in dictionary['parallel'])
+    def _create_parallel_anim(self, d):
+        anims = (create_anim() for create_anim in d['parallel'])
         r = next(anims)
         for anim in anims:
             r &= anim
@@ -55,39 +55,39 @@ class Compiler:
         raise Exception(
             "Unsupported data type: " + str(type(data)))
 
-    def _compile_dictionary(self, dictionary):
+    def _compile_dictionary(self, d):
         # replace short-form with long-form
-        temp = dictionary.pop('S', None)
+        temp = d.pop('S', None)
         if temp is not None:
-            dictionary['sequence'] = temp
-        temp = dictionary.pop('P', None)
+            d['sequence'] = temp
+        temp = d.pop('P', None)
         if temp is not None:
-            dictionary['parallel'] = temp
+            d['parallel'] = temp
 
         # If 'value' is string-type, compile it as a python expression,
         # unless 'key' is 'transition'
         need_to_eval = {}
-        for key, value in dictionary.items():
+        for key, value in d.items():
             if isinstance(value, str) and key not in ('t', 'transition'):
                 need_to_eval[key] = compile(value, '<string>', 'eval')
-        dictionary['need_to_eval'] = need_to_eval
+        d['need_to_eval'] = need_to_eval
 
         # sequence
-        sequence = dictionary.get('sequence')
-        if sequence is not None:
-            dictionary['sequence'] = self.prepare_list(sequence)
-            return partial(self._create_sequential_anim, dictionary)
+        listobj = d.get('sequence')
+        if listobj is not None:
+            d['sequence'] = self._compile_list(listobj)
+            return partial(self._create_sequential_anim, d)
 
         # parallel
-        parallel = dictionary.get('parallel')
-        if parallel is not None:
-            dictionary['parallel'] = self.prepare_list(parallel)
-            return partial(self._create_parallel_anim, dictionary)
+        listobj = d.get('parallel')
+        if listobj is not None:
+            d['parallel'] = self._compile_list(listobj)
+            return partial(self._create_parallel_anim, d)
 
         # simple
-        return partial(self._create_anim, dictionary)
+        return partial(self._create_anim, d)
 
-    def prepare_list(self, listobj):
+    def _compile_list(self, listobj):
         return [
             partial(self.create_anim_from_id, item) if isinstance(item, str)
             else self._compile_dictionary(item) if isinstance(item, dict)
