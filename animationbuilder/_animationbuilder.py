@@ -21,11 +21,11 @@ class AnimationData(Mapping):
     def __init__(self, database, **kwargs):
         super(AnimationData, self).__init__()
         self._compiler = Compiler(database, **kwargs)
-        self._compile = self._compiler.compile
+        self._create_anim_from_id = self._compiler.create_anim_from_id
         self._database = database
 
     def __getitem__(self, key):
-        return self._compile(key)
+        return self._create_anim_from_id(key)
 
     def __iter__(self):
         return iter(self._database)
