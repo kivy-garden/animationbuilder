@@ -28,13 +28,13 @@ class Compiler:
     def _do_eval(self, dictionary):
         dictionary.update({
             key: eval(codeobject, self.globals, self.locals)
-            for key, codeobject in dictionary['need_eval'].items()
+            for key, codeobject in dictionary['need_to_eval'].items()
         })
 
     def _create_anim(self, dictionary):
         copied = dictionary.copy()
         self._do_eval(copied)
-        del copied['need_eval']
+        del copied['need_to_eval']
         return Animation(**copied)
 
     def _create_sequential_anim(self, dictionary):
@@ -68,11 +68,11 @@ class Compiler:
             dictionary['parallel'] = temp
 
         # if value is str and starts with EVAL_PREFIX, compile it as python expression
-        need_eval = {}
+        need_to_eval = {}
         for key, value in dictionary.items():
             if isinstance(value, str) and value.startswith(EVAL_PREFIX):
-                need_eval[key] = compile(value[EVAL_PREFIX_LENGTH:], '<string>', 'eval')
-        dictionary['need_eval'] = need_eval
+                need_to_eval[key] = compile(value[EVAL_PREFIX_LENGTH:], '<string>', 'eval')
+        dictionary['need_to_eval'] = need_to_eval
 
         # sequence
         sequence = dictionary.get('sequence')
