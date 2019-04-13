@@ -37,28 +37,28 @@ __init__: |
     from kivy.utils import get_random_color
 
 change_color_randomly:
-    color: e get_random_color()
-    d: e random() + 1
+    color: get_random_color()
+    d: random() + 1
 
 random_sleep:
     d: 0.01
-    s: e random()
+    s: random()
 
 star_bounce:
     P:
-        - center_x: e random() * parent.width
-          d: e bounce_duration
+        - center_x: random() * parent.width
+          d: bounce_duration
         - y: 0
-          d: e bounce_duration
+          d: bounce_duration
           t: out_bounce
 
 star_opacity:
     S:
         - opacity: 1
-          d: e bounce_duration
+          d: bounce_duration
         - random_sleep
         - opacity: 0
-          d: e random() + 1
+          d: random() + 1
 
 star_color:
     S:

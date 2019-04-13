@@ -228,9 +228,9 @@ class AnimationBuilderTestCase(unittest.TestCase):
             yield 0
             anims = AB_load_string(dedent('''
             main:
-                x: e external_value * 2
+                x: external_value * 2
                 opacity: |  # test multiline
-                    e (
+                    (
                         0.1 +
                         0.2
                     )
@@ -275,24 +275,24 @@ class AnimationBuilderTestCase(unittest.TestCase):
             ellipse:
               S:
                 - P:
-                  - center_x: e half_width
+                  - center_x: half_width
                     t: in_sine
                   - y: 0
                     t: out_sine
                 - P:
-                  - right: e width
+                  - right: width
                     t: out_sine
-                  - center_y: e half_height
+                  - center_y: half_height
                     t: in_sine
                 - P:
-                  - center_x: e half_width
+                  - center_x: half_width
                     t: in_sine
-                  - top: "e height"
+                  - top: height
                     t: out_sine
                 - P:
                   - x: 0
                     t: out_sine
-                  - center_y: e half_height
+                  - center_y: half_height
                     t: in_sine
             main:
               P:
