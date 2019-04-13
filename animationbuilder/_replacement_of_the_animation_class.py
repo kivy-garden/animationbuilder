@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 '''
-`kivy.animation.Sequence` and `kivy.animation.Parallel` are buggy.
+Use its own Animation classes, because original ones are buggy.
 https://github.com/kivy/kivy/issues/5204
 https://github.com/kivy/kivy/issues/5443
+https://github.com/kivy/kivy/issues/5929
 '''
 
 __all__ = ('Animation', 'Sequence', 'Parallel', )

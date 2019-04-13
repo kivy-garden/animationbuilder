@@ -1,12 +1,12 @@
 # AnimationBuilder: Easy way of writing Kivy Animations
 
-Using `kivy.animation.Animation` directly is a pain. `AnimationBuilder` provides you with easy way.  
+Using `kivy.animation.Animation` directly is kinda pain. `AnimationBuilder` lets you write animations in YAML format.
 
 ![screenshot](screenshot.png)
 
 ## Usage
 
-### Basic
+The following code:
 
 ```python
 from kivy.garden.animationbuilder import AnimationBuilder
@@ -25,7 +25,7 @@ anims['move_to_right'].start(some_widget1)
 anims['move_to_top'].start(some_widget2)
 ```
 
-The code above is equivalent to:  
+is equivalent to:
 
 ```python
 from kivy.animation import Animation
@@ -40,7 +40,7 @@ The former looks even worse than the latter. But when you write more complex ani
 
 ```yaml
 test_sequence:
-  sequence:  # You can use 'S' instead of 'sequence'
+  sequence:  # You can write 'S' instead of 'sequence'
     - right: 800
       d: 2
     - top: 600
@@ -67,7 +67,7 @@ move_to_right:
   right: 800
   d: 2
 test_parallel:
-  parallel:   # You can use 'P' instead of 'parallel'
+  parallel:   # You can write 'P' instead of 'parallel'
     - move_to_right
     - top: 600
       t: in_out_cubic
@@ -95,7 +95,7 @@ more_nesting:
       repeat: True
 ```
 
-But the code below might be easier to read.  
+But the following code might be easier to read.
 
 ```yaml
 less_nesting:
@@ -136,25 +136,47 @@ from kivy.garden.animationbuilder import AnimationBuilder
 
 anims = AnimationBuilder.load_string(r'''
 change_color:
-    color: "e: get_random_color()"
-    d: "e: random() + additional_time"
+    color: get_random_color()
+    d: random() + additional_time
 ''')
 anims.globals = {
     'get_random_color': get_random_color,
     'random': random,
     'additional_time': 1,
 }
-# anims.locals = None
 
-anim = anims['change_color']  # This is where `eval`s are excuted.
+anim = anims['change_color']  # This is where `eval()` is called.
 anim.start(some_widget)
 ```
 
-`eval` is excuted when animation is created. `locals` and `globals` attributes are directly passed to built-in function `eval()`.  
+`eval()` is called when an animation is created. And `locals` and `globals` properties are passed to it.
+
+### `__init__`
+
+If the YAML file contains `__init__` as a key of dictionary, its value will be excuted as python statements. The following code is equivalent to the code above:
+
+```python
+from kivy.garden.animationbuilder import AnimationBuilder
+
+
+anims = AnimationBuilder.load_string(r'''
+__init__: |
+    from random import random
+    from kivy.utils import get_random_color
+    additional_time = 1
+
+change_color:
+    color: get_random_color()
+    d: random() + additional_time
+''')
+
+anim = anims['change_color']
+anim.start(some_widget)
+```
 
 ## Live Preview
 
-Just like [kviewer](https://github.com/kivy/kivy/blob/master/kivy/tools/kviewer.py), livepreview.py allowing you to dynamically display the animation.
+Just like [kviewer](https://github.com/kivy/kivy/blob/master/kivy/tools/kviewer.py), `livepreview.py` allowing you to dynamically display the animation.
 
 ```text
 python ./livepreview.py ./filename.yaml
@@ -172,15 +194,26 @@ python ./livepreview.py ./filename.yaml
 
 ### Everytime you call `__getitem__()`, it returns a new instance
 
-so  `anims['key'] is anims['key']` is always False.  
+So `anims['key'] is anims['key']` is always False.  
 
 ### Be careful of using some words (YAML in general)
 
 There are so many words that are translated as boolean value.  
 For instance: Yes, No, y, n, ON, OFF  [more info](http://yaml.org/type/bool.html)
 
+### Circular reference may crash the program(not tested)
+
+```yaml
+anim1:
+  S:
+    - anim2
+anim2:
+  S:
+    - anim1
+```
+
 ## Others
 
 **Tested Environment**  
-Python 3.5.0 + Kivy 1.10.1  
+Python 3.7.1 + Kivy 1.11.0dev  
 ~~Python 2.7.2 + Kivy 1.10.0~~  
