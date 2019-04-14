@@ -1,6 +1,6 @@
 # AnimationBuilder: Easy way of writing Kivy Animations
 
-Using `kivy.animation.Animation` directly is kinda pain. `AnimationBuilder` lets you write animations in YAML format.
+Using `kivy.animation.Animation` directly is kinda pain. `AnimationBuilder` allows you to write animations in YAML format.
 
 ![screenshot](screenshot.png)
 
@@ -10,7 +10,6 @@ The following code:
 
 ```python
 from kivy.garden.animationbuilder import AnimationBuilder
-
 
 anims = AnimationBuilder.load_string(r'''
 move_to_right:
@@ -34,7 +33,7 @@ Animation(right=800, d=2).start(some_widget1)
 Animation(top=600, t='in_out_cubic').start(some_widget2)
 ```
 
-The former looks even worse than the latter. But when you write more complex animations, the latter becomes unreadable.  
+The former looks even worse than the latter, but when you write more complex animations, the latter may become unreadable.  
 
 ### Sequential Animation
 
@@ -139,11 +138,11 @@ change_color:
     color: get_random_color()
     d: random() + additional_time
 ''')
-anims.globals = {
-    'get_random_color': get_random_color,
-    'random': random,
-    'additional_time': 1,
-}
+anims.locals.update(
+    get_random_color=get_random_color,
+    random=random,
+    additional_time=1,
+)
 
 anim = anims['change_color']  # This is where `eval()` is called.
 anim.start(some_widget)
@@ -151,13 +150,12 @@ anim.start(some_widget)
 
 `eval()` is called when an animation is created. And `locals` and `globals` properties are passed to it.
 
-### `__init__`
+### \_\_init\_\_
 
-If the YAML file contains `__init__` as a key of dictionary, its value will be excuted as python statements. The following code is equivalent to the code above:
+If the YAML file contains `__init__` as a key of dictionary, its value will be excuted as python statements. The following code is equivalent to the above:
 
 ```python
 from kivy.garden.animationbuilder import AnimationBuilder
-
 
 anims = AnimationBuilder.load_string(r'''
 __init__: |
@@ -215,5 +213,5 @@ anim2:
 ## Others
 
 **Tested Environment**  
-Python 3.7.1 + Kivy 1.11.0dev  
+Python 3.7.2 + Kivy 1.10.1  
 ~~Python 2.7.2 + Kivy 1.10.0~~  
