@@ -14,7 +14,7 @@ class Compiler:
             key: self._compile_dictionary(data)
             for key, data in database.items()
         }
-        self.locals = kwargs.get('locals', None)
+        self.locals = kwargs.get('locals', {})
         self.globals = kwargs.get('globals', {})
         if init_code is not None:
             exec(init_code, self.globals, self.locals)

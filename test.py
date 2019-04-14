@@ -235,7 +235,7 @@ class AnimationBuilderTestCase(unittest.TestCase):
                         0.2
                     )
             '''))
-            anims.locals = {'external_value': 300, }
+            anims.locals['external_value'] = 300
             anim = anims['main']
             self.assertEqual(target.x, 0)
             yield 0
@@ -299,12 +299,12 @@ class AnimationBuilderTestCase(unittest.TestCase):
                 - blink
                 - ellipse
             '''))
-            anims.locals = {
-                'width': root.width,
-                'height': root.height,
-                'half_width': root.center_x,
-                'half_height': root.center_y,
-            }
+            anims.locals.update(
+                width=root.width,
+                height=root.height,
+                half_width=root.center_x,
+                half_height=root.center_y,
+            )
             anim = anims['main']
             target.center_y = root.center_y
             anim.start(target)

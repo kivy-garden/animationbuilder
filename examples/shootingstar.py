@@ -136,10 +136,10 @@ class ShootingStarApp(App):
         root = self.root
         anims = AnimationBuilder.load_string(
             ANIMATION_CODE,
-            globals={'parent': root, })
+            locals={'parent': root, })
 
         def spawn_star():
-            anims.globals['bounce_duration'] = random() * 4 + 2
+            anims.locals['bounce_duration'] = random() * 4 + 2
             length = random() * 200 + 20
 
             star = Star(

@@ -109,7 +109,7 @@ class AnimViewerApp(App):
         root.add_widget(self.target)
         try:
             self.anims = AnimationBuilder.load_file(
-                join(PATH, TARGET), globals={'parent': root, })
+                join(PATH, TARGET), locals={'parent': root, })
             self.play_animation()
         except Exception as e:
             root.add_widget(Label(text=(
