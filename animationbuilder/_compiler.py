@@ -37,11 +37,9 @@ class Compiler:
     def _create_sequential_anim(self, d):
         anims = (create_anim() for create_anim in d['sequence'])
         r = sum(anims, next(anims))
-
-        copied = d.copy()
-        self._do_eval(copied)
-
-        r.repeat = copied.get('repeat', False)
+        codeobj = d['need_to_eval'].get('repeat')
+        r.repeat = d.get('repeat', False) if codeobj is None \
+            else eval(codeobj, self.globals, self.locals)
         return r
 
     def _create_parallel_anim(self, d):
