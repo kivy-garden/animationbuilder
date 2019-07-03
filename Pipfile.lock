@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fe1884a4d3c228226bf3c1a4c58f032f9a781b2234b99a7f1aff73a0e46968c3"
+            "sha256": "4d093761a7b91974f5f877eab82f7194bda939b3774025aafa2d2dcf99b197a0"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -22,20 +22,6 @@
                 "sha256:e9535b8c84dc9571a48999094fda7f33e63c3f1b74f3e5f3ac0105a58405bb65"
             ],
             "version": "==0.26.2"
-        },
-        "async-generator": {
-            "hashes": [
-                "sha256:01c7bf666359b4967d2cda0000cc2e4af16a0ae098cbffcb8472fb9e8ad6585b",
-                "sha256:6ebb3d106c12920aaae42ccb6f787ef5eefdcdd166ea3d628fa8476abe712144"
-            ],
-            "version": "==1.10"
-        },
-        "attrs": {
-            "hashes": [
-                "sha256:69c0dbf2ed392de1cb5ec704444b08a5ef81680a61cb899dc08127123af36a79",
-                "sha256:f0b870f674851ecbfbbbd364d6b5cbdff9dcedbc7f3f5e18a6891057f21fe399"
-            ],
-            "version": "==19.1.0"
         },
         "cython": {
             "hashes": [
@@ -71,23 +57,9 @@
             "index": "pypi",
             "version": "==0.29.9"
         },
-        "idna": {
-            "hashes": [
-                "sha256:c357b3f628cf53ae2c4c05627ecc484553142ca23264e593d327bcde5e9c3407",
-                "sha256:ea8b7f6188e6fa117537c3df7da9fc686d485087abf6ac197f9c46432f7e4a3c"
-            ],
-            "version": "==2.8"
-        },
         "kivy": {
             "git": "git://github.com/matham/kivy.git",
             "ref": "async-support"
-        },
-        "outcome": {
-            "hashes": [
-                "sha256:7357af9ba2a08fdff8c742818909c5d146fc1fe75aee4bddadaa4f8ad726d262",
-                "sha256:9d58c05db36a900ce60c6da0167d76e28869f64b338d60fa3a61841cfa54ac71"
-            ],
-            "version": "==1.0.0"
         },
         "pathtools": {
             "hashes": [
@@ -160,28 +132,6 @@
             ],
             "index": "pypi",
             "version": "==5.1.1"
-        },
-        "sniffio": {
-            "hashes": [
-                "sha256:20ed6d5b46f8ae136d00b9dcb807615d83ed82ceea6b2058cecb696765246da5",
-                "sha256:8e3810100f69fe0edd463d02ad407112542a11ffdc29f67db2bf3771afb87a21"
-            ],
-            "version": "==1.1.0"
-        },
-        "sortedcontainers": {
-            "hashes": [
-                "sha256:974e9a32f56b17c1bac2aebd9dcf197f3eb9cd30553c5852a3187ad162e1a03a",
-                "sha256:d9e96492dd51fae31e60837736b38fe42a187b5404c16606ff7ee7cd582d4c60"
-            ],
-            "version": "==2.1.0"
-        },
-        "trio": {
-            "hashes": [
-                "sha256:3796774aedbf5be581c68f98c79b565654876de6e9a01c6a95e3ec6cd4e4b4c3",
-                "sha256:b0c03d312c300a947e54e204be88255992434e824374b7d3cc886876dab9a542"
-            ],
-            "index": "pypi",
-            "version": "==0.11.0"
         },
         "watchdog": {
             "hashes": [
@@ -276,6 +226,14 @@
             ],
             "version": "==5.0.0"
         },
+        "pytest-asyncio": {
+            "hashes": [
+                "sha256:9fac5100fd716cbecf6ef89233e8590a4ad61d729d1732e0a96b84182df1daaf",
+                "sha256:d734718e25cfc32d2bf78d346e99d33724deeba774cc4afdf491530c6184b63b"
+            ],
+            "index": "pypi",
+            "version": "==0.10.0"
+        },
         "pytest-trio": {
             "hashes": [
                 "sha256:6a50e9585ebbb0ce9ae83d33bde7865952d76c4d4b8759a0345a551f113d468c",
@@ -310,7 +268,6 @@
                 "sha256:3796774aedbf5be581c68f98c79b565654876de6e9a01c6a95e3ec6cd4e4b4c3",
                 "sha256:b0c03d312c300a947e54e204be88255992434e824374b7d3cc886876dab9a542"
             ],
-            "index": "pypi",
             "version": "==0.11.0"
         },
         "wcwidth": {

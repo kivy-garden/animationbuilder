@@ -11,7 +11,7 @@ from kivy.properties import ListProperty
 from kivy.app import App
 
 import beforetest
-from animationbuilder import AnimationBuilder
+from kivy_garden.animationbuilder import AnimationBuilder
 
 schedule_once = Clock.schedule_once
 

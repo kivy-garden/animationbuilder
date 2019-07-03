@@ -5,11 +5,11 @@ livepreview
 ===========
 
 livepreview is a simple tool allowing you to dynamically display
-a anim file, taking its changes into account (thanks to watchdog).
+an anim file, taking its changes into account (thanks to watchdog).
 
 You can use the script as follows::
 
-    python livepreview.py ./test.yaml
+    python -m kivy_garden.animationbuilder.livepreview ./test.yaml
 
 This will display the test.yaml and automatically update the display when the
 file changes.
@@ -33,8 +33,8 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from os.path import dirname, basename, join, exists
 
-from animationbuilder import AnimationBuilder
-from animationbuilder.animation_classes import Animation
+from . import AnimationBuilder
+from .animation_classes import Animation
 
 
 if len(argv) != 2:

@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+__version__ = '0.0.1dev0'
 
 try:
     from ._animationbuilder import AnimationBuilder

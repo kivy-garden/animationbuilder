@@ -7,7 +7,7 @@ Config.set('graphics', 'maxfps', 0)
 from kivy.lang import Builder
 from kivy.base import runTouchApp, stopTouchApp
 
-from animationbuilder import AnimationBuilder
+from kivy_garden.animationbuilder import AnimationBuilder
 
 AB_load_string = AnimationBuilder.load_string
 

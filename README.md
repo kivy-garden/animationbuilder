@@ -177,7 +177,7 @@ anim.start(some_widget)
 Just like [kviewer](https://github.com/kivy/kivy/blob/master/kivy/tools/kviewer.py), `livepreview.py` allowing you to dynamically display the animation.
 
 ```text
-python ./livepreview.py ./filename.yaml
+python -m kivy_garden.animationbuilder.livepreview ./filename.yaml
 ```
 
 ![screenshot](livepreview.png)  
@@ -213,5 +213,6 @@ anim2:
 ## Others
 
 **Tested Environment**  
-Python 3.7.2 + Kivy 1.10.1  
-~~Python 2.7.2 + Kivy 1.10.0~~  
+
+- Python 3.7.1 
+- Kivy(`pip install git+git://github.com/matham/kivy.git@async-support#egg=kivy`)
