@@ -47,8 +47,8 @@ TARGET = basename(argv[1])
 
 # create empty file if it doesn't exist
 if not exists(argv[1]):
-    stream = io.open(argv[1], 'wb')
-    stream.close()
+    with io.open(argv[1], 'wt', encoding='utf-8') as stream:
+        stream.write('main:\n  right: 400\n')
 
 Builder.load_string(r'''
 <AnimationTarget@Scatter>:
@@ -117,5 +117,4 @@ class AnimViewerApp(App):
             )))
 
 
-if __name__ == '__main__':
-    AnimViewerApp().run()
+AnimViewerApp().run()
