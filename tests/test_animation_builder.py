@@ -1,319 +1,154 @@
-# -*- coding: utf-8 -*-
-
-import unittest
-from textwrap import dedent
-from kivy.config import Config
-Config.set('graphics', 'maxfps', 0)
-from kivy.lang import Builder
-from kivy.base import runTouchApp, stopTouchApp
-
+import pytest
+from textwrap import dedent as textwrap_dedent
+from math import isclose
+from kivy.tests import async_sleep, UnitKivyApp, async_run
 from kivy_garden.animationbuilder import AnimationBuilder
 
-AB_load_string = AnimationBuilder.load_string
+
+def basic_app():
+    from kivy.lang import Builder
+    from kivy.app import App
+
+    class TestApp(UnitKivyApp, App):
+        def build(self):
+            root = Builder.load_string(textwrap_dedent('''
+                FloatLayout:
+                    Image:
+                        id: target
+                        source: 'data/logo/kivy-icon-32.png'
+                        size_hint: None, None
+                '''))
+            target = root.ids.target
+            target.size = target.texture_size
+            return root
+
+    return TestApp()
 
 
-def yieldsleep(create_gen):
-    '''about this decorator
-    https://github.com/gottadiveintopython/kivy-module-collection/tree/master/modules/yieldsleep
-    '''
-    from functools import wraps
-    from kivy.clock import Clock
-
-    @wraps(create_gen)
-    def func(*args, **kwargs):
-        gen = create_gen(*args, **kwargs)
-
-        def resume_gen(dt):
-            try:
-                Clock.schedule_once(resume_gen, next(gen))
-            except StopIteration:
-                pass
-
-        resume_gen(0)
-    return func
+@async_run(app_cls_func=basic_app)
+async def test_simple_anim(kivy_app, delta):
+    target = kivy_app.root.ids.target
+    anim = AnimationBuilder.load_string(textwrap_dedent('''
+        main:
+            x: 300
+            d: .5
+        '''))['main']
+    assert target.x == 0
+    anim.start(target)
+    await async_sleep(.25)
+    assert isclose(target.x, 150, abs_tol=delta)
+    await async_sleep(.25)
+    assert isclose(target.x, 300, abs_tol=delta)
 
 
-class AnimationBuilderTestCase(unittest.TestCase):
+@async_run(app_cls_func=basic_app)
+async def test_sequential_anim(kivy_app, delta):
+    target = kivy_app.root.ids.target
+    anim = AnimationBuilder.load_string(textwrap_dedent('''
+        main:
+            S:
+                - x: 300
+                  d: .5
+                - y: 200
+                  d: .5
+        '''))['main']
+    assert target.x == 0
+    assert target.y == 0
+    anim.start(target)
+    await async_sleep(.25)
+    assert isclose(target.x, 150, abs_tol=delta)
+    assert target.y == 0
+    await async_sleep(.25)
+    assert isclose(target.x, 300, abs_tol=delta)
+    assert isclose(target.y, 0, abs_tol=delta)
+    await async_sleep(.25)
+    assert target.x == 300
+    assert isclose(target.y, 100, abs_tol=delta)
+    await async_sleep(.25)
+    assert target.x == 300
+    assert isclose(target.y, 200, abs_tol=delta)
 
-    DELTA = 10
 
-    def setUp(self):
-        self.root = root = Builder.load_string(dedent('''
-        FloatLayout:
-            Image:
-                id: target
-                source: 'data/logo/kivy-icon-128.png'
-                size_hint: None, None
+@async_run(app_cls_func=basic_app)
+async def test_put_other_animation_inside(kivy_app, delta):
+    target = kivy_app.root.ids.target
+    anim = AnimationBuilder.load_string(textwrap_dedent('''
+        move_to_right:
+            x: 300
+            d: .5
+        main:
+            sequence:
+                - move_to_right
+                - y: 200
+                  d: .5
+        '''))['main']
+    assert target.x == 0
+    assert target.y == 0
+    anim.start(target)
+    await async_sleep(.25)
+    assert isclose(target.x, 150, abs_tol=delta)
+    assert target.y == 0
+    await async_sleep(.25)
+    assert isclose(target.x, 300, abs_tol=delta)
+    assert isclose(target.y, 0, abs_tol=delta)
+    await async_sleep(.25)
+    assert target.x == 300
+    assert isclose(target.y, 100, abs_tol=delta)
+    await async_sleep(.25)
+    assert target.x == 300
+    assert isclose(target.y, 200, abs_tol=delta)
+
+
+@async_run(app_cls_func=basic_app)
+async def test_parallel_anim(kivy_app, delta):
+    target = kivy_app.root.ids.target
+    anim = AnimationBuilder.load_string(textwrap_dedent('''
+        main:
+            P:
+                - x: 300
+                  d: 1
+                - y: 200
+                  d: .5
+        '''))['main']
+    assert target.x == 0
+    assert target.y == 0
+    anim.start(target)
+    await async_sleep(.25)
+    assert isclose(target.x, 75, abs_tol=delta)
+    assert isclose(target.y, 100, abs_tol=delta)
+    await async_sleep(.25)
+    assert isclose(target.x, 150, abs_tol=delta)
+    assert isclose(target.y, 200, abs_tol=delta)
+    await async_sleep(.25)
+    assert isclose(target.x, 225, abs_tol=delta)
+    assert target.y == 200
+    await async_sleep(.25)
+    assert isclose(target.x, 300, abs_tol=delta)
+    assert target.y == 200
+
+
+def test_init():
+    anims = AnimationBuilder.load_string(textwrap_dedent('''
+        __init__: |
+            import random
+            def func():
+                return 100
+            value = 400
         '''))
-        self.target = target = root.ids.target
-        target.size = target.texture.size
-
-    def tearDown(self):
-        from kivy.core.window import Window
-        for child in Window.children[:]:
-            Window.remove_widget(child)
-
-    def test_simple_anim(self):
-        root = self.root
-        target = self.target
-        DELTA = self.DELTA
-
-        @yieldsleep
-        def _func():
-            yield 0
-            anims = AB_load_string(dedent('''
-            main:
-                x: 600
-            '''))
-            anim = anims['main']
-            self.assertEqual(target.x, 0)
-            yield 0
-            anim.start(target)
-            yield .5
-            self.assertAlmostEqual(target.x, 300, delta=DELTA)
-            yield .5
-            self.assertAlmostEqual(target.x, 600, delta=DELTA)
-            stopTouchApp()
-
-        _func()
-        runTouchApp(root)
-
-    def test_sequential_anim(self):
-        root = self.root
-        target = self.target
-        DELTA = self.DELTA
-
-        @yieldsleep
-        def _func():
-            yield 0
-            anims = AB_load_string(dedent('''
-            main:
-                S:
-                    - x: 600
-                    - y: 400
-            '''))
-            anim = anims['main']
-            self.assertEqual(target.x, 0)
-            self.assertEqual(target.y, 0)
-            yield 0
-            anim.start(target)
-            yield .5
-            self.assertAlmostEqual(target.x, 300, delta=DELTA)
-            self.assertEqual(target.y, 0)
-            yield .5
-            self.assertAlmostEqual(target.x, 600, delta=DELTA)
-            self.assertAlmostEqual(target.y, 0, delta=DELTA)
-            yield .5
-            self.assertAlmostEqual(target.x, 600, delta=DELTA)
-            self.assertAlmostEqual(target.y, 200, delta=DELTA)
-            yield .5
-            self.assertAlmostEqual(target.x, 600, delta=DELTA)
-            self.assertAlmostEqual(target.y, 400, delta=DELTA)
-            yield .5
-            stopTouchApp()
-
-        _func()
-        runTouchApp(root)
-
-    def test_sequential_anim2(self):
-        root = self.root
-        target = self.target
-        DELTA = self.DELTA
-
-        @yieldsleep
-        def _func():
-            yield 0
-            anims = AB_load_string(dedent('''
-            move_to_right:
-                x: 600
-            main:
-                sequence:
-                    - move_to_right
-                    - y: 400
-            '''))
-            anim = anims['main']
-            self.assertEqual(target.x, 0)
-            self.assertEqual(target.y, 0)
-            yield 0
-            anim.start(target)
-            yield .5
-            self.assertAlmostEqual(target.x, 300, delta=DELTA)
-            self.assertEqual(target.y, 0)
-            yield .5
-            self.assertAlmostEqual(target.x, 600, delta=DELTA)
-            self.assertAlmostEqual(target.y, 0, delta=DELTA)
-            yield .5
-            self.assertAlmostEqual(target.x, 600, delta=DELTA)
-            self.assertAlmostEqual(target.y, 200, delta=DELTA)
-            yield .5
-            self.assertAlmostEqual(target.x, 600, delta=DELTA)
-            self.assertAlmostEqual(target.y, 400, delta=DELTA)
-            yield .5
-            stopTouchApp()
-
-        _func()
-        runTouchApp(root)
-
-    def test_parallel_anim(self):
-        root = self.root
-        target = self.target
-        DELTA = self.DELTA
-
-        @yieldsleep
-        def _func():
-            yield 0
-            anims = AB_load_string(dedent('''
-            main:
-                P:
-                    - x: 600
-                    - y: 400
-                      d: .6
-            '''))
-            anim = anims['main']
-            self.assertAlmostEqual(target.x, 0)
-            yield 0
-            anim.start(target)
-            yield .5
-            self.assertAlmostEqual(target.x, 300, delta=DELTA)
-            self.assertAlmostEqual(target.y, 333, delta=DELTA)
-            yield .5
-            self.assertAlmostEqual(target.x, 600, delta=DELTA)
-            self.assertAlmostEqual(target.y, 400, delta=DELTA)
-            yield .5
-            stopTouchApp()
-
-        _func()
-        runTouchApp(root)
-
-    def test_parallel_anim2(self):
-        root = self.root
-        target = self.target
-        DELTA = self.DELTA
-
-        @yieldsleep
-        def _func():
-            yield 0
-            anims = AB_load_string(dedent('''
-            move_to_right:
-                x: 600
-            main:
-                parallel:
-                    - move_to_right
-                    - y: 400
-                      d: 0.6
-            '''))
-            anim = anims['main']
-            self.assertAlmostEqual(target.x, 0)
-            yield 0
-            anim.start(target)
-            yield .5
-            self.assertAlmostEqual(target.x, 300, delta=DELTA)
-            self.assertAlmostEqual(target.y, 333, delta=DELTA)
-            yield .5
-            self.assertAlmostEqual(target.x, 600, delta=DELTA)
-            self.assertAlmostEqual(target.y, 400, delta=DELTA)
-            yield .5
-            stopTouchApp()
-
-        _func()
-        runTouchApp(root)
-
-    def test_eval(self):
-        root = self.root
-        target = self.target
-        DELTA = self.DELTA
-
-        @yieldsleep
-        def _func():
-            yield 0
-            anims = AB_load_string(dedent('''
-            main:
-                x: external_value * 2
-                opacity: |  # test multiline
-                    (
-                        0.1 +
-                        0.2
-                    )
-            '''))
-            anims.locals['external_value'] = 300
-            anim = anims['main']
-            self.assertEqual(target.x, 0)
-            yield 0
-            anim.start(target)
-            yield 1
-            self.assertAlmostEqual(target.x, 600, delta=DELTA)
-            yield .1
-            anims.locals['external_value'] = 0
-            anim = anims['main']
-            yield 0
-            anim.start(target)
-            yield 1
-            self.assertAlmostEqual(target.x, 0, delta=DELTA)
-            yield .5
-            stopTouchApp()
-
-        _func()
-        runTouchApp(root)
-
-    def test_complex_anim(self):
-        root = self.root
-        target = self.target
-
-        @yieldsleep
-        def _func():
-            yield 0
-            anims = AB_load_string(dedent('''
-            blink:
-              repeat: True
-              S:
-                - opacity: .4
-                  t: out_quad
-                  d: .5
-                - opacity: 1
-                  t: out_quad
-                  d: .5
-            ellipse:
-              S:
-                - P:
-                  - center_x: half_width
-                    t: in_sine
-                  - y: 0
-                    t: out_sine
-                - P:
-                  - right: width
-                    t: out_sine
-                  - center_y: half_height
-                    t: in_sine
-                - P:
-                  - center_x: half_width
-                    t: in_sine
-                  - top: height
-                    t: out_sine
-                - P:
-                  - x: 0
-                    t: out_sine
-                  - center_y: half_height
-                    t: in_sine
-            main:
-              P:
-                - blink
-                - ellipse
-            '''))
-            anims.locals.update(
-                width=root.width,
-                height=root.height,
-                half_width=root.center_x,
-                half_height=root.center_y,
-            )
-            anim = anims['main']
-            target.center_y = root.center_y
-            anim.start(target)
-            yield 4
-            stopTouchApp()
-
-        _func()
-        runTouchApp(root)
+    available_ids = set(anims.locals.keys()) | (anims.globals.keys())
+    assert available_ids == {
+        'random', 'func', 'value', '__builtins__',
+    }
 
 
-if __name__ == '__main__':
-    unittest.main()
+def test_init_and_eval():
+    anim = AnimationBuilder.load_string(textwrap_dedent('''
+        __init__: |
+            def func():
+                return 100
+            value = 200
+        main:
+            x: value + func()
+        '''))['main']
+    assert anim._animated_properties == {'x': 300, }
+    

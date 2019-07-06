@@ -12,7 +12,6 @@ kivy = {git = "git://github.com/matham/kivy.git", ref = "async-support"}
 
 [dev-packages]
 pytest-trio = "*"
-pytest-asyncio = "*"
 
 [requires]
 python_version = "3.7"

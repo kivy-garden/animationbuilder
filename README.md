@@ -210,9 +210,12 @@ anim2:
     - anim1
 ```
 
-## Others
+## Tests
 
-**Tested Environment**  
+To run the unit tests:
 
-- Python 3.7.1 
-- Kivy(`pip install git+git://github.com/matham/kivy.git@async-support#egg=kivy`)
+  1. install the async version of Kivy(`$ pip install git+git://github.com/matham/kivy.git@async-support#egg=kivy`)
+  1. install `pytest-trio` (`$ pip install pytest-trio --dev`)
+  1. then `$ make test`
+
+(The unit tests aren't perfectly written. You may need to change `delta` in `conftest.py`.)
